@@ -1,4 +1,4 @@
-package cn.element.core.bean;
+package cn.element.core.bean.factory;
 
 /**
  * BeanDefinition是Spring框架里面一个常用的类
@@ -7,14 +7,14 @@ package cn.element.core.bean;
  */
 public class BeanDefinition {
 
-    private Object bean;
+    private Class bean;
 
-    public BeanDefinition(Object bean) {
+    public BeanDefinition(Class bean) {
 
         this.bean = bean;
     }
 
-    public Object getBean() {
+    public Class getBeanClass() {
 
         return bean;
     }
