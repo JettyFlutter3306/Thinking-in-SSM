@@ -1,4 +1,4 @@
-package cn.element.core.bean.factory;
+package cn.element.core.beans.factory;
 
 /**
  * BeanDefinition是Spring框架里面一个常用的类

@@ -1,8 +1,8 @@
 package cn.element.test;
 
 import cn.element.core.BeansException;
-import cn.element.core.bean.factory.BeanDefinition;
-import cn.element.core.bean.support.DefaultListableBeanFactory;
+import cn.element.core.beans.factory.BeanDefinition;
+import cn.element.core.beans.support.DefaultListableBeanFactory;
 import org.junit.Test;
 
 public class TestBean {
@@ -44,6 +44,21 @@ public class TestBean {
         UserService userService1 = (UserService) beanFactory.getBean("userService");
 
         userService1.queryUserInfo();
+    }
+
+    @Test
+    public void test03() throws BeansException {
+
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2. 注入bean
+        BeanDefinition beanDefinition = new BeanDefinition(UserService.class);
+        beanFactory.registerBeanDefinition("userService", beanDefinition);
+
+        // 3.获取bean
+        UserService userService = (UserService) beanFactory.getBean("userService", "小傅哥");
+        userService.queryUserInfo();
     }
 
 }

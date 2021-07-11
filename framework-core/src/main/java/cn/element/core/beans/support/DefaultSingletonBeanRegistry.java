@@ -1,6 +1,6 @@
-package cn.element.core.bean.support;
+package cn.element.core.beans.support;
 
-import cn.element.core.bean.factory.SingletonBeanRegistry;
+import cn.element.core.beans.factory.SingletonBeanRegistry;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

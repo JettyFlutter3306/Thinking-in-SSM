@@ -1,4 +1,4 @@
-package cn.element.core.bean;
+package cn.element.core.beans;
 
 import cn.element.core.BeansException;
 
@@ -15,4 +15,6 @@ import cn.element.core.BeansException;
 public interface BeanFactory {
 
     Object getBean(String name) throws BeansException;
+
+    Object getBean(String name, Object... args) throws BeansException;
 }

@@ -1,6 +1,6 @@
-package cn.element.core.bean.support;
+package cn.element.core.beans.support;
 
-import cn.element.core.bean.factory.BeanDefinition;
+import cn.element.core.beans.factory.BeanDefinition;
 
 public interface BeanDefinitionRegistry {
 
