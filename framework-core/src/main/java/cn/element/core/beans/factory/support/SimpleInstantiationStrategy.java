@@ -1,7 +1,7 @@
-package cn.element.core.beans.support;
+package cn.element.core.beans.factory.support;
 
-import cn.element.core.BeansException;
-import cn.element.core.beans.factory.BeanDefinition;
+import cn.element.core.beans.BeansException;
+import cn.element.core.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -17,14 +17,16 @@ import java.lang.reflect.InvocationTargetException;
 public class SimpleInstantiationStrategy implements InstantiationStrategy {
 
     @Override
-    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) throws BeansException {
-
+    public Object instantiate(BeanDefinition beanDefinition,
+                              String beanName,
+                              Constructor constructor,
+                              Object[] args) throws BeansException {
         Class clazz = beanDefinition.getBeanClass();
 
         try {
-            if(constructor != null){
+            if (constructor != null) {
                 return clazz.getDeclaredConstructor(constructor.getParameterTypes()).newInstance(args);
-            }else{
+            } else {
                 return clazz.getDeclaredConstructor().newInstance();
             }
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

@@ -1,4 +1,4 @@
-package cn.element.core;
+package cn.element.core.beans;
 
 public class BeansException extends Exception {
 

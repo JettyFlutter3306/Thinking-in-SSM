@@ -1,6 +1,6 @@
-package cn.element.core.beans;
+package cn.element.core.beans.factory;
 
-import cn.element.core.BeansException;
+import cn.element.core.beans.BeansException;
 
 /**
  * 声明Bean工厂类

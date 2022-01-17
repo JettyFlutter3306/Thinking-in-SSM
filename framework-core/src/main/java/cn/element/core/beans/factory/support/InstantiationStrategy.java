@@ -1,7 +1,7 @@
-package cn.element.core.beans.support;
+package cn.element.core.beans.factory.support;
 
-import cn.element.core.BeansException;
-import cn.element.core.beans.factory.BeanDefinition;
+import cn.element.core.beans.BeansException;
+import cn.element.core.beans.factory.config.BeanDefinition;
 
 import java.lang.reflect.Constructor;
 
@@ -14,6 +14,9 @@ import java.lang.reflect.Constructor;
  */
 public interface InstantiationStrategy {
 
-    Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) throws BeansException;
+    Object instantiate(BeanDefinition beanDefinition,
+                       String beanName,
+                       Constructor constructor,
+                       Object[] args) throws BeansException;
 
 }

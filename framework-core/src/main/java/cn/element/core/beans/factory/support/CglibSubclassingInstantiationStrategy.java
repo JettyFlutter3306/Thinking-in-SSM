@@ -1,7 +1,6 @@
-package cn.element.core.beans.support;
+package cn.element.core.beans.factory.support;
 
-import cn.element.core.BeansException;
-import cn.element.core.beans.factory.BeanDefinition;
+import cn.element.core.beans.factory.config.BeanDefinition;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
 
@@ -15,12 +14,9 @@ import java.lang.reflect.Constructor;
 public class CglibSubclassingInstantiationStrategy implements InstantiationStrategy {
 
     @Override
-    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) throws BeansException {
-
+    public Object instantiate(BeanDefinition beanDefinition, String beanName, Constructor constructor, Object[] args) {
         Enhancer enhancer = new Enhancer();
-
         enhancer.setSuperclass(beanDefinition.getBeanClass());
-
         enhancer.setCallback(new NoOp() {
             @Override
             public int hashCode() {
@@ -28,7 +24,7 @@ public class CglibSubclassingInstantiationStrategy implements InstantiationStrat
             }
         });
 
-        if(constructor == null){
+        if (constructor == null) {
             return enhancer.create();
         }
 
