@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userDao" class="cn.element.core.test.bean.UserDao"/>
+
+    <bean id="userService" class="cn.element.core.test.bean.UserService">
+        <property name="uid" value="10001"/>
+        <property name="userDao" ref="userDao"/>
+    </bean>
+</beans>

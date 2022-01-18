@@ -1,4 +1,4 @@
-package cn.element.core.test.bean;
+package cn.element.core.test;
 
 import cn.element.core.beans.BeansException;
 import cn.element.core.beans.PropertyValue;
@@ -6,6 +6,8 @@ import cn.element.core.beans.PropertyValues;
 import cn.element.core.beans.factory.config.BeanDefinition;
 import cn.element.core.beans.factory.config.BeanReference;
 import cn.element.core.beans.factory.support.DefaultListableBeanFactory;
+import cn.element.core.test.bean.UserDao;
+import cn.element.core.test.bean.UserService;
 import org.junit.Test;
 
 public class TestBean {
