@@ -1,8 +1,13 @@
 package cn.element.core.beans.factory.support;
 
 import cn.element.core.beans.BeansException;
-import cn.element.core.beans.factory.BeanFactory;
+
 import cn.element.core.beans.factory.config.BeanDefinition;
+import cn.element.core.beans.factory.config.BeanPostProcessor;
+import cn.element.core.beans.factory.config.ConfigurableBeanFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 抽象类定义模板方法类
@@ -15,7 +20,10 @@ import cn.element.core.beans.factory.config.BeanDefinition;
  * 后续继承抽象类 AbstractBeanFactory 的类有两个，
  * 包括：AbstractAutowireCapableBeanFactory、DefaultListableBeanFactory，
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    /** BeanPostProcessors to apply in createBean */
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<BeanPostProcessor>();
 
     @Override
     public Object getBean(String name) throws BeansException {
@@ -27,19 +35,37 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return doGetBean(name, args);
     }
 
-    protected <T> T doGetBean(final String name, final Object[] args) throws BeansException {
-        Object bean = getSingleton(name);
+    @Override
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+        return (T) getBean(name);
+    }
 
+    protected <T> T doGetBean(final String name, final Object[] args) {
+        Object bean = getSingleton(name);
         if (bean != null) {
             return (T) bean;
         }
 
         BeanDefinition beanDefinition = getBeanDefinition(name);
-
         return (T) createBean(name, beanDefinition, args);
     }
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor){
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
+
+    /**
+     * Return the list of BeanPostProcessors that will get applied
+     * to beans created with this factory.
+     */
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
+
 }

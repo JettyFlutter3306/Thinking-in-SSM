@@ -6,8 +6,11 @@ import cn.element.core.beans.PropertyValues;
 import cn.element.core.beans.factory.config.BeanDefinition;
 import cn.element.core.beans.factory.config.BeanReference;
 import cn.element.core.beans.factory.support.DefaultListableBeanFactory;
+import cn.element.core.beans.factory.xml.XmlBeanDefinitionReader;
 import cn.element.core.test.bean.UserDao;
 import cn.element.core.test.bean.UserService;
+import cn.element.core.test.common.IBeanFactoryPostProcessor;
+import cn.element.core.test.common.IBeanPostProcessor;
 import org.junit.Test;
 
 public class TestBean {
@@ -63,6 +66,28 @@ public class TestBean {
 
         // 5. UserService 获取 bean
         UserService userService = (UserService) beanFactory.getBean("userService");
+        userService.queryUserInfo();
+    }
+
+    @Test
+    public void testBeanFactoryPostProcessor() {
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2. 读取配置文件&注册 Bean
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions("classpath:application-context.xml");
+
+        // 3. BeanDefinition 加载完成 & Bean 实例化之前，修改 BeanDefinition 的属性值
+        IBeanFactoryPostProcessor beanFactoryPostProcessor = new IBeanFactoryPostProcessor();
+        beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+
+        // 4. Bean 实例化之后，修改 Bean 属性信息
+        IBeanPostProcessor beanPostProcessor = new IBeanPostProcessor();
+        beanFactory.addBeanPostProcessor(beanPostProcessor);
+
+        // 5. 获取 Bean 对象调用方法
+        UserService userService = beanFactory.getBean("userService", UserService.class);
         userService.queryUserInfo();
     }
 

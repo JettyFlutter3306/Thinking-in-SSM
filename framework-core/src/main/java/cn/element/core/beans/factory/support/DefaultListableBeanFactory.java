@@ -1,8 +1,10 @@
 package cn.element.core.beans.factory.support;
 
 import cn.element.core.beans.BeansException;
+import cn.element.core.beans.factory.ConfigurableListableBeanFactory;
 import cn.element.core.beans.factory.config.BeanDefinition;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,11 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * BeanFactory和AbstractBeanFactory等一连串的功能实现,所以有时候会看到
  * 一些类的强制转换,调用某些方法,也是因为强转的类型实现接口或继承了某些类
  *
- * 除此之外这个类还实现了接口BeanDefinitionRegistry中registerBeanDefinition(beanName, beanDefinition)方法
- * 当然还会看到一个getBeanDefinition的实现,这个方法之前提到过它是抽象类AbstractBeanFactory中定义的抽象方法
- * 现在注册Bean定义与获取Bean定义就可以同时使用了
  */
-public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry {
+public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
+                                        implements BeanDefinitionRegistry,
+                                                   ConfigurableListableBeanFactory {
 
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
 
@@ -31,6 +32,18 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     }
 
     @Override
+    public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
+        Map<String, T> result = new HashMap<>();
+        beanDefinitionMap.forEach((beanName, beanDefinition) -> {
+            Class beanClass = beanDefinition.getBeanClass();
+            if (type.isAssignableFrom(beanClass)) {
+                result.put(beanName, (T) getBean(beanName));
+            }
+        });
+        return result;
+    }
+
+    @Override
     public String[] getBeanDefinitionNames() {
         return beanDefinitionMap.keySet().toArray(new String[0]);
     }
@@ -38,11 +51,12 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
     @Override
     public BeanDefinition getBeanDefinition(String beanName) throws BeansException {
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
-
-        if (beanDefinition == null) {
-            throw new BeansException("No bean named '" + beanName + "' is defined!");
-        }
-
+        if (beanDefinition == null) throw new BeansException("No bean named '" + beanName + "' is defined");
         return beanDefinition;
+    }
+
+    @Override
+    public void preInstantiateSingletons() throws BeansException {
+        beanDefinitionMap.keySet().forEach(this::getBean);
     }
 }
