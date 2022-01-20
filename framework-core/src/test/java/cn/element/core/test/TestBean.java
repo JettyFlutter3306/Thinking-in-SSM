@@ -7,6 +7,7 @@ import cn.element.core.beans.factory.config.BeanDefinition;
 import cn.element.core.beans.factory.config.BeanReference;
 import cn.element.core.beans.factory.support.DefaultListableBeanFactory;
 import cn.element.core.beans.factory.xml.XmlBeanDefinitionReader;
+import cn.element.core.context.support.ClassPathXmlApplicationContext;
 import cn.element.core.test.bean.UserDao;
 import cn.element.core.test.bean.UserService;
 import cn.element.core.test.common.IBeanFactoryPostProcessor;
@@ -88,6 +89,17 @@ public class TestBean {
 
         // 5. 获取 Bean 对象调用方法
         UserService userService = beanFactory.getBean("userService", UserService.class);
+        userService.queryUserInfo();
+    }
+
+    @Test
+    public void testXml() {
+        // 1.初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:application-context.xml");
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取 Bean 对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
         userService.queryUserInfo();
     }
 

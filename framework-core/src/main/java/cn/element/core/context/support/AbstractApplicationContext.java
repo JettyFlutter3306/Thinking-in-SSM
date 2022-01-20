@@ -1,9 +1,10 @@
-package cn.element.core.context;
+package cn.element.core.context.support;
 
 import cn.element.core.beans.BeansException;
 import cn.element.core.beans.factory.ConfigurableListableBeanFactory;
 import cn.element.core.beans.factory.config.BeanFactoryPostProcessor;
 import cn.element.core.beans.factory.config.BeanPostProcessor;
+import cn.element.core.context.ConfigurableApplicationContext;
 import cn.element.core.io.DefaultResourceLoader;
 
 import java.util.Map;
@@ -30,7 +31,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     protected abstract ConfigurableListableBeanFactory getBeanFactory();
 
-    protected abstract void refreshBeanFactory();
+    protected abstract void refreshBeanFactory() throws BeansException;
 
     protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) throws BeansException {
         Map<String, BeanFactoryPostProcessor> map = beanFactory.getBeansOfType(BeanFactoryPostProcessor.class);
@@ -73,5 +74,13 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         return getBeanFactory().getBean(name, requiredType);
     }
 
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
 
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
 }

@@ -2,7 +2,6 @@ package cn.element.core.context.support;
 
 import cn.element.core.beans.factory.ConfigurableListableBeanFactory;
 import cn.element.core.beans.factory.support.DefaultListableBeanFactory;
-import cn.element.core.context.AbstractApplicationContext;
 
 /**
  * 获取 Bean 工厂和加载资源

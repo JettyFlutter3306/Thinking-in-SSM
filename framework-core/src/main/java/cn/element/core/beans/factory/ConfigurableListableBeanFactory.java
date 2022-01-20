@@ -5,8 +5,8 @@ import cn.element.core.beans.factory.config.*;
 
 
 public interface ConfigurableListableBeanFactory extends ListableBeanFactory,
-                                                            AutowireCapableBeanFactory,
-                                                            ConfigurableBeanFactory {
+                                                         AutowireCapableBeanFactory,
+                                                         ConfigurableBeanFactory {
 
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 

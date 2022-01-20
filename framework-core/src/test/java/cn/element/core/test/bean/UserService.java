@@ -1,14 +1,23 @@
 package cn.element.core.test.bean;
 
-public class UserService {
+import cn.element.core.beans.factory.DisposableBean;
+import cn.element.core.beans.factory.InitializingBean;
+
+public class UserService implements InitializingBean, DisposableBean {
 
     private String uid;
     private String company;
     private String location;
     private UserDao userDao;
 
-    public UserService() {
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行：UserService.destroy");
+    }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        System.out.println("执行：UserService.afterPropertiesSet");
     }
 
     public void queryUserInfo() {
