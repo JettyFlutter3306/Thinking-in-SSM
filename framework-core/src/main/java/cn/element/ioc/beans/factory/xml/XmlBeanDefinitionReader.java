@@ -76,6 +76,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
     /**
      * 主要负责用来解析XML文件
+     * 在解析 XML 处理类 XmlBeanDefinitionReader 中，新增加了关于 Bean 对象配置
+     * 中 scope 的解析，并把这个属性信息填充到 Bean 定义中。
      */
     protected void doLoadBeanDefinitions(InputStream is) throws ClassNotFoundException, BeansException {
         Document doc = XmlUtil.readXML(is);
@@ -100,6 +102,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String className = bean.getAttribute("class");
             String initMethod = bean.getAttribute("init-method");
             String destroyMethodName = bean.getAttribute("destroy-method");
+            String beanScope = bean.getAttribute("scope");
 
             // 获取Class,方便获取类中的名称
             Class<?> clazz = Class.forName(className);
@@ -115,6 +118,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             BeanDefinition beanDefinition = new BeanDefinition(clazz);
             beanDefinition.setInitMethodName(initMethod);
             beanDefinition.setDestroyMethodName(destroyMethodName);
+
+            if (StrUtil.isNotEmpty(beanScope)) {
+                beanDefinition.setScope(beanScope);
+            }
 
             // 读取属性并填充
             for (int j = 0; j < bean.getChildNodes().getLength(); j++) {

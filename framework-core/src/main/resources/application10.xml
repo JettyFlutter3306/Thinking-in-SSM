@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+    <bean id="userService"
+          class="cn.element.ioc.test.bean.chapter10.UserService"
+          scope="prototype"
+    >
+        <property name="uId" value="10001"/>
+        <property name="company" value="Google"/>
+        <property name="location" value="加利福尼亚"/>
+        <property name="userDao" ref="proxyUserDao"/>
+    </bean>
+
+    <bean id="proxyUserDao" class="cn.element.ioc.test.bean.chapter10.ProxyBeanFactory"/>
+</beans>
