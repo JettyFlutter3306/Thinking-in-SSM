@@ -6,6 +6,8 @@
 
     <name>framework-core</name>
 
+    <packaging>jar</packaging>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
