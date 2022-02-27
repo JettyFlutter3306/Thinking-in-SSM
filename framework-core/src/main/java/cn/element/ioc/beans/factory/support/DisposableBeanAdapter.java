@@ -11,7 +11,7 @@ public class DisposableBeanAdapter implements DisposableBean {
 
     private final Object bean;
     private final String beanName;
-    private String destroyMethodName;
+    private final String destroyMethodName;
 
     public DisposableBeanAdapter(Object bean, String beanName, BeanDefinition beanDefinition) {
         this.bean = bean;

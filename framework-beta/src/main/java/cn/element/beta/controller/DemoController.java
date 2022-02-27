@@ -18,11 +18,12 @@ public class DemoController {
     private IDemoService demoService;
 
     @RequestMapping("/query")
-    public void query(HttpServletRequest req, HttpServletResponse resp,
-                      @RequestParam("name") String name){
-//        String result = demoService.get(name);
-		String result = "My name is " + name;
+    public void query(HttpServletRequest req,
+                      HttpServletResponse resp,
+                      @RequestParam("name") String name) {
+        String result = demoService.get(name);
         try {
+            resp.setContentType("text/html;charset=utf-8");
             resp.getWriter().write(result);
         } catch (IOException e) {
             e.printStackTrace();
@@ -30,8 +31,10 @@ public class DemoController {
     }
 
     @RequestMapping("/add")
-    public void add(HttpServletRequest req, HttpServletResponse resp,
-                    @RequestParam("a") Integer a, @RequestParam("b") Integer b){
+    public void add(HttpServletRequest req,
+                    HttpServletResponse resp,
+                    @RequestParam("a") Integer a,
+                    @RequestParam("b") Integer b) {
         try {
             resp.getWriter().write(a + "+" + b + "=" + (a + b));
         } catch (IOException e) {
@@ -40,8 +43,9 @@ public class DemoController {
     }
 
     @RequestMapping("/remove")
-    public void remove(HttpServletRequest req,HttpServletResponse resp,
-                       @RequestParam("id") Integer id){
+    public void remove(HttpServletRequest req,
+                       HttpServletResponse resp,
+                       @RequestParam("id") Integer id) {
     }
 
 }

@@ -4,6 +4,7 @@ import cn.element.ioc.util.ClassUtils;
 import cn.hutool.core.lang.Assert;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -27,7 +28,7 @@ public class ClassPathResource implements Resource {
     }
 
     @Override
-    public InputStream getInputStream() throws Exception {
+    public InputStream getInputStream() throws IOException {
         InputStream is = classLoader.getResourceAsStream(path);
 
         if (is == null) {

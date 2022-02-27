@@ -7,7 +7,7 @@
 
 <!--    <servlet>-->
 <!--        <servlet-name>dispatcherServlet</servlet-name>-->
-<!--        <servlet-class>cn.element.beta.servlet.v1.DispatcherServlet</servlet-class>-->
+<!--        <servlet-class>cn.element.beta.config.DispatcherServlet</servlet-class>-->
 <!--        <load-on-startup>10</load-on-startup>-->
 <!--&lt;!&ndash;        <init-param>&ndash;&gt;-->
 <!--&lt;!&ndash;            <param-name>contextConfigLocation</param-name>&ndash;&gt;-->
@@ -18,9 +18,10 @@
 <!--        <servlet-name>dispatcherServlet</servlet-name>-->
 <!--        <url-pattern>/*</url-pattern>-->
 <!--    </servlet-mapping>-->
+
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
-        <servlet-class>cn.element.beta.servlet.v1.DispatcherServlet</servlet-class>
+        <servlet-class>cn.element.beta.config.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>application.properties</param-value>
@@ -30,5 +31,14 @@
     <servlet-mapping>
         <servlet-name>dispatcherServlet</servlet-name>
         <url-pattern>/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>hello</servlet-name>
+        <servlet-class>cn.element.beta.servlet.HelloServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>hello</servlet-name>
+        <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 </web-app>

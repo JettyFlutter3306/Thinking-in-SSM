@@ -4,7 +4,7 @@ import cn.element.ioc.beans.BeansException;
 import cn.element.ioc.beans.factory.DisposableBean;
 import cn.element.ioc.beans.factory.config.SingletonBeanRegistry;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,15 +20,16 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
 
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
 
-    private final Map<String, DisposableBean> disposableBeans = new HashMap<>();
+    private final Map<String, DisposableBean> disposableBeans = new LinkedHashMap<>();
 
     @Override
     public Object getSingleton(String beanName) {
         return singletonObjects.get(beanName);
     }
 
-    protected void addSingleton(String beanName, Object singleObject) {
-        singletonObjects.put(beanName, singleObject);
+    @Override
+    public void registerSingleton(String beanName, Object singletonObject) {
+        singletonObjects.put(beanName, singletonObject);
     }
 
     public void registerDisposableBean(String beanName, DisposableBean bean) {
@@ -36,7 +37,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     }
 
     public void destroySingletons() {
-        Set<String> keySet = this.disposableBeans.keySet();
+        Set<String> keySet = disposableBeans.keySet();
         Object[] disposableBeanNames = keySet.toArray();
 
         for (int i = disposableBeanNames.length - 1; i >= 0; i--) {

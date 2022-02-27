@@ -21,7 +21,7 @@ public class UrlResource implements Resource {
     }
 
     @Override
-    public InputStream getInputStream() throws Exception {
+    public InputStream getInputStream() throws IOException {
         URLConnection connection = url.openConnection();
 
         try {

@@ -14,6 +14,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -48,8 +49,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             try (InputStream is = resource.getInputStream()) {
                 doLoadBeanDefinitions(is);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException | ClassNotFoundException e) {
+            throw new BeansException("IOException parsing XML document from " + resource, e);
         }
     }
 
