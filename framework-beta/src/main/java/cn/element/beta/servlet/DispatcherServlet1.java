@@ -1,4 +1,4 @@
-package cn.element.beta.config;
+package cn.element.beta.servlet;
 
 import cn.element.ioc.annotation.AutoWired;
 import cn.element.mvc.annotation.Controller;
@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class DispatcherServlet extends HttpServlet {
+public class DispatcherServlet1 extends HttpServlet {
 
     private static final String LOCATION = "contextConfigLocation";
 
@@ -35,7 +35,7 @@ public class DispatcherServlet extends HttpServlet {
     // 保存所有的Url和方法的映射关系
     private final List<Handler> handlerMapping = new ArrayList<>();
 
-    public DispatcherServlet() {
+    public DispatcherServlet1() {
         super();
     }
 

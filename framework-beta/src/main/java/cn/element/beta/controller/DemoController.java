@@ -18,8 +18,7 @@ public class DemoController {
     private IDemoService demoService;
 
     @RequestMapping("/query")
-    public void query(HttpServletRequest req,
-                      HttpServletResponse resp,
+    public void query(HttpServletRequest req, HttpServletResponse resp,
                       @RequestParam("name") String name) {
         String result = demoService.get(name);
         try {
@@ -31,8 +30,7 @@ public class DemoController {
     }
 
     @RequestMapping("/add")
-    public void add(HttpServletRequest req,
-                    HttpServletResponse resp,
+    public void add(HttpServletRequest req, HttpServletResponse resp,
                     @RequestParam("a") Integer a,
                     @RequestParam("b") Integer b) {
         try {

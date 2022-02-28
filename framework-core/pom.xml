@@ -26,6 +26,7 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>5.7.7</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -35,10 +36,26 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--jol-->
         <dependency>
             <groupId>org.openjdk.jol</groupId>
             <artifactId>jol-core</artifactId>
             <version>0.16</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--aop-->
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <!--aspectj-->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.9.7</version>
         </dependency>
     </dependencies>
 

@@ -7,7 +7,7 @@
 
 <!--    <servlet>-->
 <!--        <servlet-name>dispatcherServlet</servlet-name>-->
-<!--        <servlet-class>cn.element.beta.config.DispatcherServlet</servlet-class>-->
+<!--        <servlet-class>cn.element.beta.servlet.DispatcherServlet1</servlet-class>-->
 <!--        <load-on-startup>10</load-on-startup>-->
 <!--&lt;!&ndash;        <init-param>&ndash;&gt;-->
 <!--&lt;!&ndash;            <param-name>contextConfigLocation</param-name>&ndash;&gt;-->
@@ -21,7 +21,7 @@
 
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
-        <servlet-class>cn.element.beta.config.DispatcherServlet</servlet-class>
+        <servlet-class>cn.element.beta.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>application.properties</param-value>
