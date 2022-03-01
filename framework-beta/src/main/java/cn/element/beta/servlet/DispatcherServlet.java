@@ -2,6 +2,7 @@ package cn.element.beta.servlet;
 
 import cn.element.ioc.annotation.AutoWired;
 import cn.element.mvc.annotation.Controller;
+import cn.element.mvc.annotation.RequestMapping;
 import cn.element.mvc.annotation.Service;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
@@ -38,6 +39,7 @@ public class DispatcherServlet extends HttpServlet {
 
     /**
      * 保存url和Method的关系
+     * 使用委派模式实现路径名和方法名之间的映射
      */
     private final Map<String, Method> handlerMapping = new HashMap<>();
     
@@ -69,7 +71,33 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        try {
+            doDispatch(req, resp);
+        } catch (Exception e) {
+            e.printStackTrace();
+            resp.getWriter().write("500 Exception, Detail : " + Arrays.toString(e.getStackTrace()));
+        }
+    }
+
+    private void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        String url = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        System.out.println(url);
+        System.out.println(contextPath);
+        url = url.replaceAll(contextPath, "").replaceAll("/+", "/");
+        System.out.println(url);
+                
+        if (!handlerMapping.containsKey(url)) {
+            response.getWriter().write("404 NOT FOUND");
+            return;
+        }
+
+        Method method = handlerMapping.get(url);
+        Map<String, String[]> params = request.getParameterMap();
+        
+        String beanName = StrUtil.lowerFirst(method.getDeclaringClass().getName());
+        method.invoke(ioc.get(beanName), request, response, params.get("name")[0]);
+        System.out.println(method.getName());
     }
 
     /**
@@ -137,7 +165,7 @@ public class DispatcherServlet extends HttpServlet {
                 
                 if (clazz.isAnnotationPresent(Controller.class)) {
                     Object instance = clazz.newInstance();
-                    String beanName = StrUtil.lowerFirst(clazz.getSimpleName());
+                    String beanName = StrUtil.lowerFirst(clazz.getName());
                     
                     ioc.put(beanName, instance);
                 } else if (clazz.isAnnotationPresent(Service.class)) {
@@ -145,7 +173,7 @@ public class DispatcherServlet extends HttpServlet {
                     String beanName = service.value().trim();
                     
                     if (StrUtil.isEmpty(beanName)) {
-                        beanName = StrUtil.lowerFirst(clazz.getSimpleName());
+                        beanName = StrUtil.lowerFirst(clazz.getName());
                     }
 
                     Object instance = clazz.newInstance();
@@ -181,12 +209,12 @@ public class DispatcherServlet extends HttpServlet {
             Field[] fields = entry.getValue().getClass().getDeclaredFields();
 
             for (Field field : fields) {
-                if (!field.isAnnotationPresent(AutoWired.class)) {
+                if (field.isAnnotationPresent(AutoWired.class)) {
                     AutoWired wired = field.getAnnotation(AutoWired.class);
                     String beanName = wired.value().trim();
                     
                     if (StrUtil.isEmpty(beanName)) {
-                        beanName = StrUtil.lowerFirst(field.getType().getSimpleName());
+                        beanName = StrUtil.lowerFirst(field.getType().getName());
                     }
                     
                     field.setAccessible(true);
@@ -200,15 +228,43 @@ public class DispatcherServlet extends HttpServlet {
                 }
             }
         }
-    }
-    
-    private void initHandlerMapping() {
         
-    }
-    
-    private void doDispatch(HttpServletRequest request, HttpServletResponse response) {
-        
+        ioc.forEach((k, v) -> System.out.println(k + "=" + v));
     }
 
-    
+    /**
+     * 初始化url和Method的一对一关系
+     */
+    private void initHandlerMapping() {
+        if (ioc.isEmpty()) {
+            return;
+        }
+
+        for (Map.Entry<String, Object> entry : ioc.entrySet()) {
+            Class<?> clazz = entry.getValue().getClass();
+            
+            if (!clazz.isAnnotationPresent(Controller.class)) {
+                continue;
+            }
+            
+            // 保存在类上面的@RequestMapping("/")
+            String baseUrl = "";
+            
+            if (clazz.isAnnotationPresent(RequestMapping.class)) {
+                RequestMapping requestMapping = clazz.getAnnotation(RequestMapping.class);
+                baseUrl = requestMapping.value();
+            }
+            
+            // 默认获取所有的public类型的方法
+            for (Method method : clazz.getMethods()) {
+                if (method.isAnnotationPresent(RequestMapping.class)) {
+                    RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+                    String url = ("/" + baseUrl + "/" + requestMapping.value()).replaceAll("/+", "/");
+                    
+                    handlerMapping.put(url, method);
+                    System.out.println("Mapped : " + url + " , " + method.getName());
+                }
+            }
+        }
+    }
 }
