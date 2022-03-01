@@ -4,10 +4,7 @@ import cn.element.ioc.beans.BeansException;
 import cn.element.ioc.beans.PropertyValue;
 import cn.element.ioc.beans.PropertyValues;
 import cn.element.ioc.beans.factory.*;
-import cn.element.ioc.beans.factory.config.AutowireCapableBeanFactory;
-import cn.element.ioc.beans.factory.config.BeanDefinition;
-import cn.element.ioc.beans.factory.config.BeanPostProcessor;
-import cn.element.ioc.beans.factory.config.BeanReference;
+import cn.element.ioc.beans.factory.config.*;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 
@@ -66,6 +63,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Object bean;
 
         try {
+            // 判断是否返回代理Bean对象
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            
+            if (bean != null) {
+                return bean;
+            }
+            
+            // 实例化bean
             bean = createBeanInstance(beanDefinition, beanName, args);
 
             // 给Bean填充属性
@@ -194,6 +199,30 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
     public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
         this.instantiationStrategy = instantiationStrategy;
+    }
+    
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorsBeforeInstantiation(beanDefinition.getBeanClass(), beanName);
+        
+        if (null != bean) {
+            bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+        }
+        
+        return bean;
+    }
+    
+    protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        
+        return null;
     }
 
     @Override

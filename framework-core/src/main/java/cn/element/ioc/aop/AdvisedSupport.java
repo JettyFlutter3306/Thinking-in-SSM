@@ -9,6 +9,9 @@ import org.aopalliance.intercept.MethodInterceptor;
  */
 public class AdvisedSupport {
 
+    // ProxyConfig
+    private boolean proxyTargetClass = false;
+
     /**
      * 被代理的对象
      * TargetSource，是一个目标对象，在目标对象类中提供 Object 入参属性，以及获
@@ -25,28 +28,40 @@ public class AdvisedSupport {
      * 提供服务。
      */
     private MethodMatcher matcher;
+    
+    public boolean isProxyTargetClass() {
+        return proxyTargetClass;
+    }
+
+    public AdvisedSupport setProxyTargetClass(boolean proxyTargetClass) {
+        this.proxyTargetClass = proxyTargetClass;
+        return this;
+    }
 
     public TargetSource getTargetSource() {
         return target;
     }
 
-    public void setTargetSource(TargetSource target) {
+    public AdvisedSupport setTargetSource(TargetSource target) {
         this.target = target;
+        return this;
     }
 
     public MethodInterceptor getInterceptor() {
         return interceptor;
     }
 
-    public void setInterceptor(MethodInterceptor interceptor) {
+    public AdvisedSupport setInterceptor(MethodInterceptor interceptor) {
         this.interceptor = interceptor;
+        return this;
     }
 
     public MethodMatcher getMatcher() {
         return matcher;
     }
 
-    public void setMatcher(MethodMatcher matcher) {
+    public AdvisedSupport setMatcher(MethodMatcher matcher) {
         this.matcher = matcher;
+        return this;
     }
 }

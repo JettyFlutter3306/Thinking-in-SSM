@@ -5,20 +5,6 @@
          version="4.0">
     <display-name>BETA Web Application</display-name>
 
-<!--    <servlet>-->
-<!--        <servlet-name>dispatcherServlet</servlet-name>-->
-<!--        <servlet-class>cn.element.beta.servlet.DispatcherServlet1</servlet-class>-->
-<!--        <load-on-startup>10</load-on-startup>-->
-<!--&lt;!&ndash;        <init-param>&ndash;&gt;-->
-<!--&lt;!&ndash;            <param-name>contextConfigLocation</param-name>&ndash;&gt;-->
-<!--&lt;!&ndash;            <param-value>classpath:application.properties</param-value>&ndash;&gt;-->
-<!--&lt;!&ndash;        </init-param>&ndash;&gt;-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>dispatcherServlet</servlet-name>-->
-<!--        <url-pattern>/*</url-pattern>-->
-<!--    </servlet-mapping>-->
-
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
         <servlet-class>cn.element.beta.servlet.DispatcherServlet</servlet-class>

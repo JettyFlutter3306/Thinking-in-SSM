@@ -1,5 +1,6 @@
 package cn.element.ioc.context.support;
 
+import cn.element.ioc.beans.BeansException;
 import cn.element.ioc.beans.factory.ConfigurableListableBeanFactory;
 import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 
@@ -17,9 +18,9 @@ import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 public abstract class AbstractRefreshableApplicationContext extends AbstractApplicationContext {
 
     private DefaultListableBeanFactory beanFactory;
-
+    
     @Override
-    protected void refreshBeanFactory() {
+    protected void refreshBeanFactory() throws BeansException {
         DefaultListableBeanFactory beanFactory = createBeanFactory();
         loadBeanDefinitions(beanFactory);
         this.beanFactory = beanFactory;
