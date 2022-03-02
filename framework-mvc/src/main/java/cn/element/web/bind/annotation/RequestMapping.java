@@ -1,4 +1,4 @@
-package cn.element.mvc.annotation;
+package cn.element.web.bind.annotation;
 
 import java.lang.annotation.*;
 

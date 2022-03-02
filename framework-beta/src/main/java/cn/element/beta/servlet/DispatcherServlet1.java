@@ -1,10 +1,10 @@
 package cn.element.beta.servlet;
 
-import cn.element.ioc.annotation.AutoWired;
-import cn.element.mvc.annotation.Controller;
-import cn.element.mvc.annotation.RequestMapping;
-import cn.element.mvc.annotation.RequestParam;
-import cn.element.mvc.annotation.Service;
+import cn.element.ioc.beans.annotation.AutoWired;
+import cn.element.ioc.stereotype.Controller;
+import cn.element.web.bind.annotation.RequestMapping;
+import cn.element.web.bind.annotation.RequestParam;
+import cn.element.ioc.stereotype.Service;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;

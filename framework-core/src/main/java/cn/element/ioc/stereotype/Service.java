@@ -1,12 +1,11 @@
-package cn.element.mvc.annotation;
+package cn.element.ioc.stereotype;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
 @Documented
-public @interface Controller {
+public @interface Service {
 
     String value() default "";
-
 }

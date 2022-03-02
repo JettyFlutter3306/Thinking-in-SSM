@@ -1,7 +1,7 @@
 package cn.element.main.controller;
 
-import cn.element.mvc.annotation.RequestMapping;
-import cn.element.mvc.annotation.RestController;
+import cn.element.web.bind.annotation.RequestMapping;
+import cn.element.web.bind.annotation.RestController;
 
 @RestController
 public class IndexController {

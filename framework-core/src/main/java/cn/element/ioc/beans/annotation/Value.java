@@ -1,4 +1,4 @@
-package cn.element.ioc.annotation;
+package cn.element.ioc.beans.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,8 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-public @interface Bean {
+@Target(ElementType.FIELD)
+public @interface Value {
 
     String value() default "";
 }

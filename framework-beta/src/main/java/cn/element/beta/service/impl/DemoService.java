@@ -1,7 +1,7 @@
 package cn.element.beta.service.impl;
 
 import cn.element.beta.service.IDemoService;
-import cn.element.mvc.annotation.Service;
+import cn.element.ioc.stereotype.Service;
 
 @Service
 public class DemoService implements IDemoService {

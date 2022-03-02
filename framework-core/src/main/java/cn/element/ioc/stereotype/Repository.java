@@ -1,11 +1,11 @@
-package cn.element.mvc.annotation;
+package cn.element.ioc.stereotype;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.PARAMETER)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RequestParam {
+public @interface Repository {
 
     String value() default "";
 }

@@ -1,4 +1,4 @@
-package cn.element.ioc.annotation;
+package cn.element.ioc.context.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface Configuration {
+public @interface ComponentScan {
 
     String value() default "";
 }

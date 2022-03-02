@@ -1,10 +1,10 @@
 package cn.element.beta.controller;
 
 import cn.element.beta.service.IDemoService;
-import cn.element.ioc.annotation.AutoWired;
-import cn.element.mvc.annotation.Controller;
-import cn.element.mvc.annotation.RequestMapping;
-import cn.element.mvc.annotation.RequestParam;
+import cn.element.ioc.beans.annotation.AutoWired;
+import cn.element.ioc.stereotype.Controller;
+import cn.element.web.bind.annotation.RequestMapping;
+import cn.element.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

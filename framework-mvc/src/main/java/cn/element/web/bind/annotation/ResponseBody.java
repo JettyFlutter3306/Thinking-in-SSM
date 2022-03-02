@@ -1,11 +1,11 @@
-package cn.element.ioc.annotation;
+package cn.element.web.bind.annotation;
 
 import java.lang.annotation.*;
 
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface AutoWired {
+public @interface ResponseBody {
 
     String value() default "";
 }
