@@ -1,7 +1,7 @@
 package cn.element.beta.controller;
 
 import cn.element.beta.service.IDemoService;
-import cn.element.ioc.beans.annotation.AutoWired;
+import cn.element.ioc.beans.factory.annotation.Autowired;
 import cn.element.ioc.stereotype.Controller;
 import cn.element.web.bind.annotation.RequestMapping;
 import cn.element.web.bind.annotation.RequestParam;
@@ -14,7 +14,7 @@ import java.io.IOException;
 @RequestMapping("/demo")
 public class DemoController {
 
-    @AutoWired
+    @Autowired
     private IDemoService demoService;
 
     @RequestMapping("/query")

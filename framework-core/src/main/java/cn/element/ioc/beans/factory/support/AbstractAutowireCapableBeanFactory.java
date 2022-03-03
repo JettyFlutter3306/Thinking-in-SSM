@@ -52,6 +52,18 @@ import java.lang.reflect.Method;
  * 在注册销毁方法的时候，会根据是接口类型和配置类型统一交给
  * DisposableBeanAdapter 销毁适配器类来做统一处理。实现了某个接口的类可以被
  * instanceof 判断或者强转后调用接口方法
+ * 
+ * AbstractAutowireCapableBeanFactory#createBean 方法中有这一条新增加的方法调
+ * 用，就是在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性
+ * 值 的操作applyBeanPostProcessorsBeforeApplyingPropertyValues
+ * 
+ * 那么这个 applyBeanPostProcessorsBeforeApplyingPropertyValues 方法中，首先就
+ * 是获取已经注入的 BeanPostProcessor 集合并从中筛选出继承接口
+ * InstantiationAwareBeanPostProcessor 的实现类
+ * 
+ * 那么这个 applyBeanPostProcessorsBeforeApplyingPropertyValues 方法中，首先就
+ * 是获取已经注入的 BeanPostProcessor 集合并从中筛选出继承接口
+ * InstantiationAwareBeanPostProcessor 的实现类
  */
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
                                                          implements AutowireCapableBeanFactory {
@@ -72,6 +84,9 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             
             // 实例化bean
             bean = createBeanInstance(beanDefinition, beanName, args);
+
+            // 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
 
             // 给Bean填充属性
             applyPropertyValues(beanName, bean, beanDefinition);
@@ -257,5 +272,22 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         return result;
+    }
+
+    /**
+     * 在设置 Bean 属性之前，允许 BeanPostProcessor 修改属性值
+     */
+    protected void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor){
+                PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                
+                if (null != pvs) {
+                    for (PropertyValue propertyValue : pvs.getPropertyValues()) {
+                        beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+                    }
+                }
+            }
+        }
     }
 }

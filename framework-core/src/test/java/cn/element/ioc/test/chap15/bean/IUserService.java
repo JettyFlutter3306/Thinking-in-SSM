@@ -1,4 +1,4 @@
-package cn.element.ioc.test.aop;
+package cn.element.ioc.test.chap15.bean;
 
 public interface IUserService {
 

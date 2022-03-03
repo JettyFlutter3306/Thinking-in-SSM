@@ -1,11 +1,14 @@
 package cn.element.beta.servlet;
 
-import cn.element.ioc.beans.annotation.AutoWired;
+import cn.element.ioc.beans.factory.annotation.Autowired;
 import cn.element.ioc.stereotype.Controller;
 import cn.element.web.bind.annotation.RequestMapping;
 import cn.element.ioc.stereotype.Service;
+import cn.element.web.bind.annotation.RequestParam;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.StrUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,12 +18,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class DispatcherServlet extends HttpServlet {
+    
+    private final Logger logger = LoggerFactory.getLogger(DispatcherServlet.class);
 
     /**
      * 保存application.properties配置文件中的内容
@@ -41,7 +49,7 @@ public class DispatcherServlet extends HttpServlet {
      * 保存url和Method的关系
      * 使用委派模式实现路径名和方法名之间的映射
      */
-    private final Map<String, Method> handlerMapping = new HashMap<>();
+    private final List<Handler> handlerMapping = new ArrayList<>();
     
 
     @Override
@@ -71,33 +79,64 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8");
+
         try {
-            doDispatch(req, resp);
+            doDispatch(req, resp); //开始始匹配到对应的方方法
         } catch (Exception e) {
-            e.printStackTrace();
-            resp.getWriter().write("500 Exception, Detail : " + Arrays.toString(e.getStackTrace()));
+            //如果匹配过程出现异常，将异常信息打印出去
+            resp.getWriter().write("500 Exception,Details:\r\n" + Arrays.toString(e.getStackTrace())
+                                                                        .replaceAll("\\[|\\]", "")
+                                                                        .replaceAll(",\\s", "\r\n"));
         }
     }
 
+    /**
+     * 匹配URL
+     */
     private void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String url = request.getRequestURI();
-        String contextPath = request.getContextPath();
-        System.out.println(url);
-        System.out.println(contextPath);
-        url = url.replaceAll(contextPath, "").replaceAll("/+", "/");
-        System.out.println(url);
-                
-        if (!handlerMapping.containsKey(url)) {
+        Handler handler = getHandler(request);
+        
+        if (handler == null) {
             response.getWriter().write("404 NOT FOUND");
             return;
         }
-
-        Method method = handlerMapping.get(url);
-        Map<String, String[]> params = request.getParameterMap();
         
-        String beanName = StrUtil.lowerFirst(method.getDeclaringClass().getName());
-        method.invoke(ioc.get(beanName), request, response, params.get("name")[0]);
-        System.out.println(method.getName());
+        // 获得方法的形参列表
+        Class<?>[] paramTypes = handler.method.getParameterTypes();
+        Object[] paramValues = new Object[paramTypes.length];
+        Map<String, String[]> params = request.getParameterMap();
+
+        for (Map.Entry<String, String[]> entry : params.entrySet()) {
+            String value = Arrays.toString(entry.getValue())
+                                 .replaceAll("\\[|\\]", "")
+                                 .replaceAll("\\s", ",");
+            
+            if (!handler.paramIndexMapping.containsKey(entry.getKey())) {
+                continue;
+            }
+            
+            int index = handler.paramIndexMapping.get(entry.getKey());
+            paramValues[index] = convert(paramTypes[index], value);
+        }
+        
+        if (handler.paramIndexMapping.containsKey(HttpServletRequest.class.getName())) {
+            int reqIndex = handler.paramIndexMapping.get(HttpServletRequest.class.getName());
+            paramValues[reqIndex] = request;
+        }
+        
+        if (handler.paramIndexMapping.containsKey(HttpServletResponse.class.getName())) {
+            int respIndex = handler.paramIndexMapping.get(HttpServletResponse.class.getName());
+            paramValues[respIndex] = response;
+        }
+        
+        Object returned = handler.method.invoke(handler.controller, paramValues);
+        
+        if (returned == null) {
+            return;
+        }
+        
+        response.getWriter().write(returned.toString());
     }
 
     /**
@@ -209,8 +248,8 @@ public class DispatcherServlet extends HttpServlet {
             Field[] fields = entry.getValue().getClass().getDeclaredFields();
 
             for (Field field : fields) {
-                if (field.isAnnotationPresent(AutoWired.class)) {
-                    AutoWired wired = field.getAnnotation(AutoWired.class);
+                if (field.isAnnotationPresent(Autowired.class)) {
+                    Autowired wired = field.getAnnotation(Autowired.class);
                     String beanName = wired.value().trim();
                     
                     if (StrUtil.isEmpty(beanName)) {
@@ -259,10 +298,90 @@ public class DispatcherServlet extends HttpServlet {
             for (Method method : clazz.getMethods()) {
                 if (method.isAnnotationPresent(RequestMapping.class)) {
                     RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-                    String url = ("/" + baseUrl + "/" + requestMapping.value()).replaceAll("/+", "/");
+                    String regex = ("/" + baseUrl + "/" + requestMapping.value()).replaceAll("/+", "/");
+                    Pattern pattern = Pattern.compile(regex);
                     
-                    handlerMapping.put(url, method);
-                    System.out.println("Mapped : " + url + " , " + method.getName());
+                    handlerMapping.add(new Handler(entry.getValue(), method, pattern));
+                    System.out.println("Mapped : " + regex + " , " + method.getName());
+                }
+            }
+        }
+    }
+    
+    private Handler getHandler(HttpServletRequest request) {
+        if (handlerMapping.isEmpty()) {
+            return null;
+        }
+        
+        String url = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        url = url.replace(contextPath, "").replaceAll("/+", "/");
+        logger.info("请求路由转发路径: {}", url);
+
+        for (Handler handler : handlerMapping) {
+            try {
+                Matcher matcher = handler.pattern.matcher(url);
+
+                if (matcher.matches()) {
+                    return handler;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return null;
+    }
+    
+    private Object convert(Class<?> type, String value) {
+        if (type == Integer.class) {
+            return Integer.parseInt(value);
+        }
+        
+        return value;
+    }
+
+    /**
+     * 记录Controller中的RequestMapping和Method的关系
+     */
+    private static class Handler {
+        protected Object controller;        // 保存方法对应的实例
+        protected Method method;            // 保存映射的方法
+        protected Pattern pattern;
+        protected final Map<String, Integer> paramIndexMapping;   // 参数顺序
+
+        public Handler(Object controller, Method method, Pattern pattern) {
+            this.controller = controller;
+            this.method = method;
+            this.pattern = pattern;
+            this.paramIndexMapping = new HashMap<>();
+            putParamIndexMapping(method);
+        }
+        
+        private void putParamIndexMapping(Method method) {
+            // 提取方法中加了注解的参数
+            Annotation[][] pa = method.getParameterAnnotations();
+
+            for (int i = 0; i < pa.length; i++) {
+                for (Annotation a : pa[i]) {
+                    if (a instanceof RequestParam) {
+                        String paramName = ((RequestParam) a).value();
+                        
+                        if (!StrUtil.isBlank(paramName)) {
+                            paramIndexMapping.put(paramName, i);
+                        }
+                    }
+                }
+            }
+            
+            // 提取方法中的request和response参数
+            Class<?>[] paramsTypes = method.getParameterTypes();
+
+            for (int i = 0; i < paramsTypes.length; i++) {
+                Class<?> type = paramsTypes[i];
+                
+                if (type == HttpServletRequest.class || type == HttpServletResponse.class) {
+                    paramIndexMapping.put(type.getName(), i);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package cn.element.ioc.context.annotation;
 
+import cn.element.ioc.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import cn.element.ioc.beans.factory.config.BeanDefinition;
 import cn.element.ioc.beans.factory.support.BeanDefinitionRegistry;
 import cn.element.ioc.stereotype.Component;
@@ -39,6 +40,12 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 registry.registerBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
             }
         }
+
+        // 注册处理注解的 BeanPostProcessor（@Autowired、@Value）
+        registry.registerBeanDefinition(
+                "cn.element.ioc.context.annotation.internalAutowiredAnnotationProcessor", 
+                new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class)
+        );
     }
 
     private String resolveBeanScope(BeanDefinition beanDefinition) {
