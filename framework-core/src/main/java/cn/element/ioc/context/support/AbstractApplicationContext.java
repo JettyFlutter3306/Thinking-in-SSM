@@ -25,7 +25,7 @@ import java.util.Map;
  * SimpleApplicationEventMulticaster，这是一个事件广播器。
  *
  * 注册事件监听器(registerListeners)，通过 getBeansOfType 方法获取到所有从
- * spring.xml 中加载到的事件配置 Bean 对象。
+ * application16.xml 中加载到的事件配置 Bean 对象。
  *
  * 发布容器刷新完成事件(finishRefresh)，发布了第一个服务器启动完成后的事件，这
  * 个事件通过 publishEvent 发布出去，其实也就是调用了

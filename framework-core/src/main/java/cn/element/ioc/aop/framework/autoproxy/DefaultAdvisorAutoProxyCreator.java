@@ -12,7 +12,6 @@ import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 /**
@@ -38,38 +37,12 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
 
     @Override
     public Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException {
-        if (isInfrastructureClass(beanClass)) {
-            return null;
-        }
-
-        Collection<AspectJExpressionPointcutAdvisor> advisors = factory.getBeansOfType(AspectJExpressionPointcutAdvisor.class)
-                                                                       .values();
-
-        for (AspectJExpressionPointcutAdvisor advisor : advisors) {
-            ClassFilter filter = advisor.getPointcut().getClassFilter();
-            
-            if (!filter.matches(beanClass)) {
-                continue;
-            }
-
-            AdvisedSupport support = new AdvisedSupport();
-            TargetSource source = null;
-
-            try {
-                source = new TargetSource(beanClass.getDeclaredConstructor().newInstance());
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                e.printStackTrace();
-            }
-            
-            support.setTargetSource(source)
-                   .setInterceptor((MethodInterceptor) advisor.getAdvice())
-                   .setMatcher(advisor.getPointcut().getMethodMatcher())
-                   .setProxyTargetClass(false);
-            
-            return new ProxyFactory(support).getProxy();
-        }
-        
         return null;
+    }
+
+    @Override
+    public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
+        return true;
     }
 
     @Override
@@ -77,8 +50,43 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
         return bean;
     }
 
+    /**
+     * 关于 DefaultAdvisorAutoProxyCreator 类的操作主要就是把创建 AOP 代理的操作
+     * 从 postProcessBeforeInstantiation 移动到 postProcessAfterInitialization 中去
+     * 
+     * 通过设置一些 AOP 的必备参数后，返回代理对象 new 
+     * ProxyFactory(advisedSupport).getProxy() 这个代理对象中就包括间
+     * 接调用了 TargetSource 中对 getTargetClass() 的获取
+     */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (isInfrastructureClass(bean.getClass())) {
+            return bean;
+        }
+
+        Collection<AspectJExpressionPointcutAdvisor> advisors = factory.getBeansOfType(AspectJExpressionPointcutAdvisor.class)
+                                                                       .values();
+
+        for (AspectJExpressionPointcutAdvisor advisor : advisors) {
+            ClassFilter classFilter = advisor.getPointcut().getClassFilter();
+            
+            // 过滤匹配类
+            if (!classFilter.matches(bean.getClass())) {
+                continue;
+            }
+
+            AdvisedSupport advisedSupport = new AdvisedSupport();
+
+            TargetSource targetSource = new TargetSource(bean);
+            advisedSupport.setTargetSource(targetSource);
+            advisedSupport.setInterceptor((MethodInterceptor) advisor.getAdvice());
+            advisedSupport.setMatcher(advisor.getPointcut().getMethodMatcher());
+            advisedSupport.setProxyTargetClass(false);
+
+            // 返回代理对象
+            return new ProxyFactory(advisedSupport).getProxy();
+        }
+
         return bean;
     }
 

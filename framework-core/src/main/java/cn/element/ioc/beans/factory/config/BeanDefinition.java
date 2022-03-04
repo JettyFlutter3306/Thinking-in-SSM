@@ -12,7 +12,7 @@ import cn.element.ioc.beans.PropertyValues;
  * 把两个构造函数做了一些简单的优化,避免后面for循环还得判断属性填充是否为空
  *
  * 在 BeanDefinition 新增加了两个属性：initMethodName、destroyMethodName，
- * 这两个属性是为了在 spring.xml 配置的 Bean 对象中，
+ * 这两个属性是为了在 application16.xml 配置的 Bean 对象中，
  * 可以配置 init-method="initDataMethod" destroy-method="destroyDataMethod" 操作，最终实现接口的效果是一样的。只不
  * 过一个是接口方法的直接调用，另外是一个在配置文件中读取到方法反射调用
  */

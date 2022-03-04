@@ -9,7 +9,7 @@ import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
  * 在 refreshBeanFactory() 中主要是获取了 DefaultListableBeanFactory
  * 的实例化以及对资源配置的加载操作
  * loadBeanDefinitions(beanFactory)，在加载完成后即可完成对
- * spring.xml 配置文件中 Bean 对象的定义和注册，同时也包括实现了接口
+ * application16.xml 配置文件中 Bean 对象的定义和注册，同时也包括实现了接口
  * BeanFactoryPostProcessor、BeanPostProcessor 的配置 Bean 信息。
  *
  * 但此时资源加载还只是定义了一个抽象类方法
