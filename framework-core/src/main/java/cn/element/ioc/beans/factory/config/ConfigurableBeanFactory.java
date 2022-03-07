@@ -3,6 +3,11 @@ package cn.element.ioc.beans.factory.config;
 import cn.element.ioc.beans.factory.HierarchicalBeanFactory;
 import cn.element.ioc.util.StringValueResolver;
 
+/**
+ * Configuration interface to be implemented by most bean factories. Provides
+ * facilities to configure a bean factory, in addition to the bean factory
+ * client methods in the BeanFactory interface.
+ */
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, SingletonBeanRegistry {
 
     String SCOPE_SINGLETON = "singleton";

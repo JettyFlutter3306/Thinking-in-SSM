@@ -65,7 +65,11 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
                 PropertyValues propertyValues = beanDefinition.getPropertyValues();
                 for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
                     Object value = propertyValue.getValue();
-                    if (!(value instanceof String)) continue;
+                    
+                    if (!(value instanceof String)) {
+                        continue;
+                    }
+                    
                     value = resolvePlaceholder((String) value, properties);
                     propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), value));
                 }
@@ -74,7 +78,6 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
             // 向容器中添加字符串解析器，供解析@Value注解使用
             StringValueResolver valueResolver = new PlaceholderResolvingStringValueResolver(properties);
             beanFactory.addEmbeddedValueResolver(valueResolver);
-
         } catch (IOException e) {
             throw new BeansException("Could not load properties", e);
         }

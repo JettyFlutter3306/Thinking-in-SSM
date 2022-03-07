@@ -21,7 +21,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
                               String beanName,
                               Constructor constructor,
                               Object[] args) throws BeansException {
-        Class clazz = beanDefinition.getBeanClass();
+        Class<?> clazz = beanDefinition.getBeanClass();
 
         try {
             if (constructor != null) {

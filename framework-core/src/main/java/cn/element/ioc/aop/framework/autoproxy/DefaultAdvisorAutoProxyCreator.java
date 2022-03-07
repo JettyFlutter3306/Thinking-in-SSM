@@ -13,6 +13,9 @@ import org.aopalliance.aop.Advice;
 import org.aopalliance.intercept.MethodInterceptor;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 这个 DefaultAdvisorAutoProxyCreator 类的主要核心实现在于
@@ -29,6 +32,8 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
                                                        BeanFactoryAware {
     
     private DefaultListableBeanFactory factory;
+    
+    private final Set<Object> earlyProxyReferences = Collections.synchronizedSet(new HashSet<>());
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -60,6 +65,14 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
      */
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        if (!earlyProxyReferences.contains(beanName)) {
+            return wrapIfNecessary(bean, beanName);
+        }
+        
+        return bean;
+    }
+
+    protected Object wrapIfNecessary(Object bean, String beanName) {
         if (isInfrastructureClass(bean.getClass())) {
             return bean;
         }
@@ -78,16 +91,22 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             AdvisedSupport advisedSupport = new AdvisedSupport();
 
             TargetSource targetSource = new TargetSource(bean);
-            advisedSupport.setTargetSource(targetSource);
-            advisedSupport.setInterceptor((MethodInterceptor) advisor.getAdvice());
-            advisedSupport.setMatcher(advisor.getPointcut().getMethodMatcher());
-            advisedSupport.setProxyTargetClass(false);
+            advisedSupport.setTargetSource(targetSource)
+                          .setInterceptor((MethodInterceptor) advisor.getAdvice())
+                          .setMatcher(advisor.getPointcut().getMethodMatcher())
+                          .setProxyTargetClass(true);
 
             // 返回代理对象
             return new ProxyFactory(advisedSupport).getProxy();
         }
 
         return bean;
+    }
+
+    @Override
+    public Object getEarlyBeanReference(Object bean, String beanName) {
+        earlyProxyReferences.add(beanName);
+        return wrapIfNecessary(bean, beanName);
     }
 
     @Override
