@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
-    <bean id="userService" 
-          class="cn.element.ioc.test.aop.UserService"/>
+    <bean id="userService" class="cn.element.ioc.test.stage12.bean.UserService"/>
 
     <bean class="cn.element.ioc.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
 
     <bean id="beforeAdvice" 
-          class="cn.element.ioc.test.aop.UserServiceBeforeAdvice"/>
+          class="cn.element.ioc.test.stage12.bean.UserServiceBeforeAdvice"/>
 
     <bean id="methodInterceptor" 
           class="cn.element.ioc.aop.framework.adapter.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="beforeAdvice"/>
     </bean>
 
-    <bean id="pointcutAdvisor" 
-          class="cn.element.ioc.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression"
-                  value="execution(* cn.element.ioc.test.aop.IUserService.*(..))"/>
+    <bean id="pointcutAdvisor" class="cn.element.ioc.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* cn.element.ioc.test.stage12.bean.IUserService.*(..))"/>
         <property name="advice" ref="methodInterceptor"/>
     </bean>
+
 </beans>

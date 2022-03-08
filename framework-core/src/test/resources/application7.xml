@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans>
 
-    <bean id="userService" class="cn.element.ioc.test.stage11.bean.UserService">
+    <bean id="userDao" 
+          class="cn.element.ioc.test.stage7.bean.UserDao" 
+          init-method="initDataMethod" 
+          destroy-method="destroyDataMethod"/>
+
+    <bean id="userService" class="cn.element.ioc.test.stage7.bean.UserService">
         <property name="uId" value="10001"/>
         <property name="company" value="腾讯"/>
         <property name="location" value="深圳"/>

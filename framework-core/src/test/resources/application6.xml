@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans>
+
+    <bean id="userDao" class="cn.element.ioc.test.stage6.bean.UserDao"/>
+
+    <bean id="userService" class="cn.element.ioc.test.stage6.bean.UserService">
+        <property name="uId" value="10001"/>
+        <property name="company" value="腾讯"/>
+        <property name="location" value="深圳"/>
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
+    <bean class="cn.element.ioc.test.stage6.common.MyBeanFactoryPostProcessor"/>
+    <bean class="cn.element.ioc.test.stage6.common.MyBeanPostProcessor"/>
+
+</beans>

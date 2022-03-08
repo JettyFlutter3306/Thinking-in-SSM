@@ -4,28 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="husband" class="cn.element.ioc.test.chap17.bean.Husband">
-        <property name="wife" ref="wife"/>
+    <bean id="husband" class="cn.element.ioc.test.stage17.bean.Husband">
+        <property name="wifiName" value="你猜"/>
+        <property name="marriageDate" value="2021-08-08"/>
     </bean>
 
-    <bean id="wife" class="cn.element.ioc.test.chap17.bean.Wife">
-        <property name="husband" ref="husband"/>
-        <property name="mother" ref="husbandMother"/>
+    <bean id="conversionService" class="cn.element.ioc.context.support.ConversionServiceFactoryBean">
+        <property name="converters" ref="converters"/>
     </bean>
 
-    <bean id="husbandMother" class="cn.element.ioc.test.chap17.bean.HusbandMother"/>
+    <bean id="converters" class="cn.element.ioc.test.stage17.converter.ConvertersFactoryBean"/>
 
-    <!-- AOP 配置，验证三级缓存 -->
-    <bean class="cn.element.ioc.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
-
-    <bean id="beforeAdvice" class="cn.element.ioc.test.chap17.bean.SpouseAdvice"/>
-
-    <bean id="methodInterceptor" class="cn.element.ioc.aop.framework.adapter.MethodBeforeAdviceInterceptor">
-        <property name="advice" ref="beforeAdvice"/>
-    </bean>
-
-    <bean id="pointcutAdvisor" class="cn.element.ioc.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* cn.element.ioc.test.chap17.bean.Wife.*(..))"/>
-        <property name="advice" ref="methodInterceptor"/>
-    </bean>
 </beans>

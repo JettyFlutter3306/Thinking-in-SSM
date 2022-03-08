@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:context="http://www.springframework.org/schema/context">
+
+    <bean class="cn.element.ioc.beans.factory.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:token.properties"/>
+    </bean>
+
+    <context:component-scan base-package="cn.element.ioc.test.stage14.bean"/>
+</beans>
