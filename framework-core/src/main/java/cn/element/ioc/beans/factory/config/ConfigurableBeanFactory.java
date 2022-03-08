@@ -1,7 +1,9 @@
 package cn.element.ioc.beans.factory.config;
 
 import cn.element.ioc.beans.factory.HierarchicalBeanFactory;
+import cn.element.ioc.core.convert.ConversionService;
 import cn.element.ioc.util.StringValueResolver;
+import com.sun.istack.internal.Nullable;
 
 /**
  * Configuration interface to be implemented by most bean factories. Provides
@@ -35,4 +37,18 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory, Single
      * @since 3.0
      */
     String resolveEmbeddedValue(String value);
+
+    /**
+     * Specify a Spring 3.0 ConversionService to use for converting
+     * property values, as an alternative to JavaBeans PropertyEditors.
+     * @since 3.0
+     */
+    void setConversionService(ConversionService conversionService);
+
+    /**
+     * Return the associated ConversionService, if any.
+     * @since 3.0
+     */
+    @Nullable
+    ConversionService getConversionService();
 }

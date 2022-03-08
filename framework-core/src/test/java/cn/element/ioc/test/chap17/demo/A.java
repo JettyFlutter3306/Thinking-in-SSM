@@ -1,4 +1,4 @@
-package cn.element.ioc.test.demo;
+package cn.element.ioc.test.chap17.demo;
 
 class A {
 

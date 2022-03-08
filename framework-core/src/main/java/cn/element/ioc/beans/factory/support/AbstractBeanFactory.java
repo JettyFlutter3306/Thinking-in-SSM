@@ -6,6 +6,7 @@ import cn.element.ioc.beans.factory.FactoryBean;
 import cn.element.ioc.beans.factory.config.BeanDefinition;
 import cn.element.ioc.beans.factory.config.BeanPostProcessor;
 import cn.element.ioc.beans.factory.config.ConfigurableBeanFactory;
+import cn.element.ioc.core.convert.ConversionService;
 import cn.element.ioc.util.ClassUtils;
 import cn.element.ioc.util.StringValueResolver;
 
@@ -43,6 +44,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport
      * String resolvers to apply e.g. to annotation attribute values
      */
     private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
+
+    private ConversionService conversionService;
 
     @Override
     public Object getBean(String name) throws BeansException {
@@ -122,5 +125,15 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport
         }
         
         return result;
+    }
+
+    @Override
+    public ConversionService getConversionService() {
+        return conversionService;
+    }
+
+    @Override
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
     }
 }

@@ -5,8 +5,10 @@ import cn.element.ioc.beans.PropertyValue;
 import cn.element.ioc.beans.PropertyValues;
 import cn.element.ioc.beans.factory.*;
 import cn.element.ioc.beans.factory.config.*;
+import cn.element.ioc.core.convert.ConversionService;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.TypeUtil;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -229,8 +231,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
         try {
             PropertyValues propertyValues = beanDefinition.getPropertyValues();
+            
             for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
-
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
 
@@ -238,6 +240,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                     // A 依赖 B，获取 B 的实例化
                     BeanReference beanReference = (BeanReference) value;
                     value = getBean(beanReference.getBeanName());
+                } else {
+                    // 类型转换
+                    Class<?> sourceType = value.getClass();
+                    Class<?> targetType = (Class<?>) TypeUtil.getFieldType(bean.getClass(), name);
+                    ConversionService conversionService = getConversionService();
+                    
+                    if (conversionService != null) {
+                        if (conversionService.canConvert(sourceType, targetType)) {
+                            value = conversionService.convert(value, targetType);
+                        }
+                    }
                 }
 
                 // 反射设置属性填充
