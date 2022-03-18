@@ -5,7 +5,7 @@ import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 import cn.element.ioc.test.stage3.bean.UserService;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

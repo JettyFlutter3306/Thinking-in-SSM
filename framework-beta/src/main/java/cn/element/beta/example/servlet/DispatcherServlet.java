@@ -1,4 +1,4 @@
-package cn.element.beta.servlet;
+package cn.element.beta.example.servlet;
 
 import cn.element.ioc.beans.factory.annotation.Autowired;
 import cn.element.ioc.stereotype.Controller;

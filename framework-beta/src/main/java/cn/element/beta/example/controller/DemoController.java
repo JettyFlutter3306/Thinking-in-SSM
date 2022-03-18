@@ -1,6 +1,6 @@
-package cn.element.beta.controller;
+package cn.element.beta.example.controller;
 
-import cn.element.beta.service.IDemoService;
+import cn.element.beta.example.service.IDemoService;
 import cn.element.ioc.beans.factory.annotation.Autowired;
 import cn.element.ioc.stereotype.Controller;
 import cn.element.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package cn.element.beta.service;
+package cn.element.beta.example.service;
 
 public interface IDemoService {
 

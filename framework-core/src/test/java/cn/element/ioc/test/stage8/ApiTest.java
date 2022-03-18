@@ -2,7 +2,7 @@ package cn.element.ioc.test.stage8;
 
 import cn.element.ioc.context.support.ClassPathXmlApplicationContext;
 import cn.element.ioc.test.stage8.bean.UserService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApiTest {
 

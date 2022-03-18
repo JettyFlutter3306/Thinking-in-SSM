@@ -7,14 +7,14 @@ public class UserDao {
 
     private static final Map<String, String> hashMap = new HashMap<>();
 
-    public void initDataMethod(){
+    public void initDataMethod() {
         System.out.println("执行：init-method");
-        hashMap.put("10001", "小傅哥");
-        hashMap.put("10002", "八杯水");
-        hashMap.put("10003", "阿毛");
+        hashMap.put("10001", "洛必达");
+        hashMap.put("10002", "牛顿");
+        hashMap.put("10003", "莱布尼茨");
     }
 
-    public void destroyDataMethod(){
+    public void destroyDataMethod() {
         System.out.println("执行：destroy-method");
         hashMap.clear();
     }

@@ -7,7 +7,7 @@ import cn.element.ioc.beans.factory.config.BeanReference;
 import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 import cn.element.ioc.test.stage4.bean.UserDao;
 import cn.element.ioc.test.stage4.bean.UserService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApiTest {
 

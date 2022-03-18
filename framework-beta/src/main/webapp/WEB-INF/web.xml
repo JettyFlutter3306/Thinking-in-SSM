@@ -7,7 +7,7 @@
 
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
-        <servlet-class>cn.element.beta.servlet.DispatcherServlet</servlet-class>
+        <servlet-class>cn.element.beta.example.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>application.properties</param-value>
@@ -21,7 +21,7 @@
 
     <servlet>
         <servlet-name>hello</servlet-name>
-        <servlet-class>cn.element.beta.servlet.HelloServlet</servlet-class>
+        <servlet-class>cn.element.beta.example.servlet.HelloServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>hello</servlet-name>

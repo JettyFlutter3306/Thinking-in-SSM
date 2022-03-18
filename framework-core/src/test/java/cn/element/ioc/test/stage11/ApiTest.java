@@ -11,7 +11,7 @@ import cn.element.ioc.test.stage11.bean.IUserService;
 import cn.element.ioc.test.stage11.bean.UserService;
 import cn.element.ioc.test.stage11.bean.UserServiceInterceptor;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

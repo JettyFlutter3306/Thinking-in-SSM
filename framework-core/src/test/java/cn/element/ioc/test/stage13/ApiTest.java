@@ -4,7 +4,7 @@ import cn.element.ioc.beans.BeansException;
 import cn.element.ioc.beans.factory.config.BeanPostProcessor;
 import cn.element.ioc.context.support.ClassPathXmlApplicationContext;
 import cn.element.ioc.test.stage13.bean.IUserService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

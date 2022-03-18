@@ -15,8 +15,8 @@ import cn.element.ioc.test.stage12.bean.UserService;
 import cn.element.ioc.test.stage12.bean.UserServiceBeforeAdvice;
 import cn.element.ioc.test.stage12.bean.UserServiceInterceptor;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -26,7 +26,7 @@ public class ApiTest {
 
     private AdvisedSupport advisedSupport;
 
-    @Before
+    @BeforeEach
     public void init() {
         // 目标对象
         IUserService userService = new UserService();

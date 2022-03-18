@@ -3,7 +3,7 @@ package cn.element.ioc.test.stage2;
 import cn.element.ioc.beans.factory.config.BeanDefinition;
 import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 import cn.element.ioc.test.stage2.bean.UserService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApiTest {
 

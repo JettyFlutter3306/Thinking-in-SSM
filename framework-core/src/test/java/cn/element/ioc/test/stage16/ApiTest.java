@@ -3,7 +3,7 @@ package cn.element.ioc.test.stage16;
 import cn.element.ioc.context.support.ClassPathXmlApplicationContext;
 import cn.element.ioc.test.stage16.bean.Husband;
 import cn.element.ioc.test.stage16.bean.Wife;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApiTest {
 

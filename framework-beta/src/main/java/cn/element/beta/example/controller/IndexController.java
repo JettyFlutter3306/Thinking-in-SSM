@@ -1,4 +1,4 @@
-package cn.element.beta.controller;
+package cn.element.beta.example.controller;
 
 import cn.element.ioc.stereotype.Controller;
 import cn.element.web.bind.annotation.RequestMapping;

@@ -1,6 +1,6 @@
-package cn.element.beta.service.impl;
+package cn.element.beta.example.service.impl;
 
-import cn.element.beta.service.IDemoService;
+import cn.element.beta.example.service.IDemoService;
 import cn.element.ioc.stereotype.Service;
 
 @Service

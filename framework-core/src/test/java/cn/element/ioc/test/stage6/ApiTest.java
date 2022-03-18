@@ -1,13 +1,12 @@
 package cn.element.ioc.test.stage6;
 
-
 import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 import cn.element.ioc.beans.factory.xml.XmlBeanDefinitionReader;
 import cn.element.ioc.context.support.ClassPathXmlApplicationContext;
 import cn.element.ioc.test.stage6.bean.UserService;
 import cn.element.ioc.test.stage6.common.MyBeanFactoryPostProcessor;
 import cn.element.ioc.test.stage6.common.MyBeanPostProcessor;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApiTest {
 

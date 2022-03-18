@@ -11,8 +11,8 @@ import cn.element.ioc.core.io.Resource;
 import cn.element.ioc.test.stage5.bean.UserDao;
 import cn.element.ioc.test.stage5.bean.UserService;
 import cn.hutool.core.io.IoUtil;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +44,7 @@ public class ApiTest {
 
     private DefaultResourceLoader resourceLoader;
 
-    @Before
+    @BeforeEach
     public void init() {
         resourceLoader = new DefaultResourceLoader();
     }

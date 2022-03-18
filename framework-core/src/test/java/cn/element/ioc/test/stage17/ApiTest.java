@@ -6,7 +6,7 @@ import cn.element.ioc.core.convert.converter.Converter;
 import cn.element.ioc.core.convert.support.StringToNumberConverterFactory;
 import cn.element.ioc.test.stage17.bean.Husband;
 import cn.element.ioc.test.stage17.converter.StringToIntegerConverter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ApiTest {
 
