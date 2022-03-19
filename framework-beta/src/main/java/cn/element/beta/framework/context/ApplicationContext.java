@@ -2,10 +2,18 @@ package cn.element.beta.framework.context;
 
 import cn.element.beta.framework.beans.BeanWrapper;
 import cn.element.beta.framework.beans.config.BeanDefinition;
+import cn.element.beta.framework.beans.config.BeanPostProcessor;
 import cn.element.beta.framework.beans.support.BeanDefinitionReader;
 import cn.element.beta.framework.beans.support.DefaultListableBeanFactory;
 import cn.element.beta.framework.core.BeanFactory;
+import cn.element.ioc.beans.factory.annotation.Autowired;
+import cn.element.ioc.stereotype.Component;
+import cn.element.ioc.stereotype.Controller;
+import cn.element.ioc.stereotype.Repository;
+import cn.element.ioc.stereotype.Service;
+import cn.hutool.core.util.StrUtil;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -60,7 +68,35 @@ public class ApplicationContext extends DefaultListableBeanFactory implements Be
      */
     @Override
     public Object getBean(String beanName) throws Exception {
-        return null;
+        BeanDefinition definition = beanDefinitionMap.get(beanName);
+
+        try {
+            // 生成通知事件
+            BeanPostProcessor processor = new BeanPostProcessor();
+
+            Object bean = instantiateBean(definition);
+
+            if (bean == null) {
+                return null;
+            }
+
+            // 在实例初始化以前调用一次
+            processor.postProcessBeforeInitialization(bean, beanName);
+
+            BeanWrapper beanWrapper = new BeanWrapper(bean);
+
+            factoryBeanInstanceCache.put(beanName, beanWrapper);
+
+            // 在实例化初始化之后调用一次
+            processor.postProcessAfterInitialization(bean, beanName);
+
+            populateBean(beanName, bean);
+
+            return factoryBeanInstanceCache.get(beanName).getWrappedInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -105,6 +141,63 @@ public class ApplicationContext extends DefaultListableBeanFactory implements Be
             
             beanDefinitionMap.put(definition.getFactoryBeanName(), definition);
         }
+    }
+    
+    private void populateBean(String beanName, Object instance) {
+        Class<?> clazz = instance.getClass();
+        
+        if (!(clazz.isAnnotationPresent(Controller.class) || 
+                clazz.isAnnotationPresent(Service.class) || 
+                clazz.isAnnotationPresent(Repository.class) ||
+                clazz.isAnnotationPresent(Component.class))) {
+            return;
+        }
+
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Autowired.class)) {
+                Autowired autowired = field.getAnnotation(Autowired.class);
+                String name = autowired.value();
+                
+                if (StrUtil.isBlank(name)) {
+                    name = field.getType().getName();
+                }
+                
+                field.setAccessible(true);
+
+                try {
+                    field.set(instance, factoryBeanInstanceCache.get(name));
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 传一个BeanDefinition,就返回一个实例Bean
+     */
+    private Object instantiateBean(BeanDefinition beanDefinition) {
+        Object bean;
+        String className = beanDefinition.getBeanClassName();
+
+        try {
+            // 根据Class才能确定一个类是否有实例
+            if (factoryBeanObjectCache.containsKey(className)) {
+                bean = factoryBeanObjectCache.get(className);
+            } else {
+                Class<?> clazz = Class.forName(className);
+                bean = clazz.newInstance();
+                factoryBeanObjectCache.put(beanDefinition.getFactoryBeanName(), bean);
+            }
+            
+            return bean;
+        } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
     }
     
     
