@@ -3,6 +3,7 @@ package cn.element.beta.framework.web;
 import cn.element.beta.framework.context.ApplicationContext;
 import cn.element.ioc.stereotype.Controller;
 import cn.element.web.bind.annotation.RequestMapping;
+import cn.hutool.core.collection.CollectionUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletConfig;
@@ -13,10 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -25,7 +24,7 @@ import java.util.regex.Pattern;
 @Slf4j
 public class DispatcherServlet extends HttpServlet {
     
-    private final String LOCATION = "contextConfigLocation";
+    private static final String LOCATION = "contextConfigLocation";
     
     private final List<HandlerMapping> handlerMappings = new ArrayList<>();
     
@@ -36,7 +35,7 @@ public class DispatcherServlet extends HttpServlet {
     private ApplicationContext context;
 
     @Override
-    public void init(ServletConfig config) throws ServletException {
+    public void init(ServletConfig config) {
         // 相当于把IoC容器初始化了
         context = new ApplicationContext(config.getInitParameter(LOCATION));
         initStrategies(context);
@@ -44,12 +43,44 @@ public class DispatcherServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
+        doPost(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
+        try {
+            doDispatch(req, resp);
+        } catch (Exception e) {
+            resp.getWriter()
+                .write("<font size='25' color='blue'>500 Exception</font><br/>Details:<br/>" 
+                        + Arrays.toString(e.getStackTrace())
+                                .replaceAll("\\[|\\]", "")
+                                .replaceAll("\\s", "\r\n")
+                        + "<font color='green'><i>Copyright@Github2022</i></font>"
+                );
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 请求分发并处理
+     */
+    private void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        // 根据用户请求的URL来获得一个Handler
+        HandlerMapping handler = getHandler(request);
+        
+        if (handler == null) {
+            processDispatchResult(request, response, new ModelAndView("404"));
+            return;
+        }
+
+        HandlerAdapter adapter = getHandlerAdapter(handler);
+        
+        // 这一步只是调用方法,得到返回值
+        ModelAndView mv = adapter.handle(request, response, handler);
+        
+        // 这一步才是真正的输出
+        processDispatchResult(request, response, mv);
     }
 
     /**
@@ -144,8 +175,8 @@ public class DispatcherServlet extends HttpServlet {
         try {
             for (String name : names) {
                 // 到了MVC层,对外提供的方法只有一个getBean()方法
-                Object controller = context.getBean(name);
-                Class<?> clazz = controller.getClass();
+                Object component = context.getBean(name);
+                Class<?> clazz = component.getClass();
                 
                 if (clazz.isAnnotationPresent(Controller.class)) {
                     String baseUrl = "";
@@ -160,11 +191,10 @@ public class DispatcherServlet extends HttpServlet {
                     for (Method method : methods) {
                         if (method.isAnnotationPresent(RequestMapping.class)) {
                             RequestMapping mapping = method.getAnnotation(RequestMapping.class);
-                            String regex = ("/" + baseUrl + mapping.value()
-                                                                   .replaceAll("\\*", ".*")
-                                                                   .replaceAll("/+", "/"));
+                            String regex = ("/" + baseUrl + mapping.value().replaceAll("\\*", ".*"))
+                                    .replaceAll("/+", "/");
                             Pattern pattern = Pattern.compile(regex);
-                            handlerMappings.add(new HandlerMapping(pattern, controller, method));
+                            handlerMappings.add(new HandlerMapping(pattern, component, method));
                             log.info("Mapping: {} - {}", regex, method);
                         }
                     }
@@ -197,15 +227,77 @@ public class DispatcherServlet extends HttpServlet {
      */
     private void initViewResolvers(ApplicationContext context) {
         String templateRoot = context.getConfig().getProperty("templates");
-        String templateRootPath = this.getClass().getClassLoader().getResource(templateRoot).getFile();
+        String templateRootPath = null;
+        try {
+            templateRootPath = this.getClass().getClassLoader().getResource(templateRoot).getFile();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         File templateRootDir = new File(templateRootPath);
 
-        for (File file : templateRootDir.listFiles()) {
+        for (String s : templateRootDir.list()) {
+            //这里主要是为了兼容多模板，所有模仿Spring用List保存
+            //在我写的代码中简化了，其实只有需要一个模板就可以搞定
+            //只是为了仿真，所有还是搞了个List
             viewResolvers.add(new ViewResolver(templateRoot));
         }
     }
+
+    /**
+     * 处理请求结果
+     */
+    private void processDispatchResult(HttpServletRequest request, HttpServletResponse response, ModelAndView mv) throws Exception {
+        // 调用ViewResolver的resolveViewName()方法
+        if (mv == null) {
+            return;
+        }
+        
+        if (CollectionUtil.isNotEmpty(viewResolvers)) {
+            for (ViewResolver viewResolver : viewResolvers) {
+                View view = viewResolver.resolveViewName(mv.getViewName(), null);
+                
+                if (view != null) {
+                    view.render(mv.getModel(), request, response);
+                    return;
+                }
+            }
+        }
+    }
     
+    private HandlerAdapter getHandlerAdapter(HandlerMapping handler) {
+        if (CollectionUtil.isEmpty(handlerAdapterMap)) {
+            return null;
+        }
+
+        HandlerAdapter adapter = handlerAdapterMap.get(handler);
+        
+        if (adapter.supports(handler)) {
+            return adapter;
+        }
+        
+        return null;
+    }
+    
+    private HandlerMapping getHandler(HttpServletRequest request) {
+        if (CollectionUtil.isEmpty(handlerMappings)) {
+            return null;
+        }
+
+        String url = request.getRequestURI();
+        String contextPath = request.getContextPath();
+        url = url.replace(contextPath, "").replaceAll("/+", "/");
+
+        for (HandlerMapping mapping : handlerMappings) {
+            Matcher matcher = mapping.getPattern().matcher(url);
+            
+            if (matcher.matches()) {
+                return mapping;
+            }
+        }
+        
+        return null;
+    }
     
     
     

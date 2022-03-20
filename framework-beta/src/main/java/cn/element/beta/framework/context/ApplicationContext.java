@@ -167,7 +167,7 @@ public class ApplicationContext extends DefaultListableBeanFactory implements Be
                 field.setAccessible(true);
 
                 try {
-                    field.set(instance, factoryBeanInstanceCache.get(name));
+                    field.set(instance, factoryBeanInstanceCache.get(name).getWrappedInstance());
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }

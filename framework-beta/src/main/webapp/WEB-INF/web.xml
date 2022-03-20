@@ -7,24 +7,15 @@
 
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
-        <servlet-class>cn.element.beta.example.servlet.DispatcherServlet</servlet-class>
+        <servlet-class>cn.element.beta.framework.web.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>application.properties</param-value>
+            <param-value>classpath:application.properties</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcherServlet</servlet-name>
         <url-pattern>/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>hello</servlet-name>
-        <servlet-class>cn.element.beta.example.servlet.HelloServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>hello</servlet-name>
-        <url-pattern>/hello</url-pattern>
     </servlet-mapping>
 </web-app>
