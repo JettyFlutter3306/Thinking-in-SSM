@@ -38,12 +38,12 @@ public class View {
             String line;
             while ((line = access.readLine()) != null) {
                 line = new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
-                Pattern pattern = Pattern.compile("$\\{[^\\}] + \\}", Pattern.CASE_INSENSITIVE);
+                Pattern pattern = Pattern.compile("\\$\\{[^}]+}", Pattern.CASE_INSENSITIVE);
                 Matcher matcher = pattern.matcher(line);
 
                 while (matcher.find()) {
                     String paramName = matcher.group();
-                    paramName = paramName.replaceAll("$\\{|\\}", "");
+                    paramName = paramName.replaceAll("\\$\\{|}", "");
                     Object paramValue = model.get(paramName);
 
                     if (paramValue != null) {
@@ -58,26 +58,18 @@ public class View {
         }
         
         response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
-//        response.setContentType(DEFAULT_CONTENT_TYPE);
+        response.setContentType(DEFAULT_CONTENT_TYPE);
         response.getWriter().write(sb.toString());
     }
     
     public static String makeStringForRegExp(String s) {
-        return s.replace("\\", "\\\\")
-                .replace("*", "\\*")
-                .replace("+", "\\+")
-                .replace("|", "\\|")
-                .replace("{", "\\{")
-                .replace("}", "\\}")
-                .replace("(", "\\(")
-                .replace(")", "\\)")
-                .replace("^", "\\^")
-                .replace("$", "\\$")
-                .replace("[", "\\[")
-                .replace("]", "\\]")
-                .replace("?", "\\?")
-                .replace(",", "\\,")
-                .replace(".", "\\.")
-                .replace("&", "\\&");
+        return s.replace("\\", "\\\\").replace("*", "\\*")
+                .replace("+", "\\+").replace("|", "\\|")
+                .replace("{", "\\{").replace("}", "\\}")
+                .replace("(", "\\(").replace(")", "\\)")
+                .replace("^", "\\^").replace("$", "\\$")
+                .replace("[", "\\[").replace("]", "\\]")
+                .replace("?", "\\?").replace(",", "\\,")
+                .replace(".", "\\.").replace("&", "\\&");
     }
 }

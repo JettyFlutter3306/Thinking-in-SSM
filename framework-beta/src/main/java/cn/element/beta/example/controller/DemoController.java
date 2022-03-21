@@ -45,7 +45,7 @@ public class DemoController {
             return out(response, result);
         } catch (Exception e) {
 //			e.printStackTrace();
-            Map<String, Object> model = new HashMap<String, Object>();
+            Map<String, Object> model = new HashMap<>();
             model.put("detail", e.getCause().getMessage());
 //			System.out.println(Arrays.toString(e.getStackTrace()).replaceAll("\\[|\\]",""));
             model.put("stackTrace", Arrays.toString(e.getStackTrace()).replaceAll("\\[|\\]", ""));
@@ -70,14 +70,14 @@ public class DemoController {
         String result = modifyService.edit(id, name);
         return out(response, result);
     }
-
-
+    
     private ModelAndView out(HttpServletResponse resp, String str) {
         try {
             resp.getWriter().write(str);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
         return null;
     }
     
