@@ -23,7 +23,7 @@ public class BeanDefinitionReader {
     /**
      * 固定位置配置文件中的key,相当于XML的规范
      */
-    private final String SCAN_PACKAGE = "scanPackage";
+    private static final String SCAN_PACKAGE = "scanPackage";
 
     public BeanDefinitionReader(String... locations) {
         // 通过URL定位找到对应的文件,然后转换为文件流

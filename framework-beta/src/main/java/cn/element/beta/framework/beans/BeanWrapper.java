@@ -23,6 +23,6 @@ public class BeanWrapper {
      * 可能会是 $Proxy0
      */
     public Class<?> getWrappedClass() {
-        return wrappedClass;
+        return wrappedInstance.getClass();
     }
 }
