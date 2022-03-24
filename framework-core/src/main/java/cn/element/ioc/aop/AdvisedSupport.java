@@ -19,7 +19,9 @@ public class AdvisedSupport {
      */
     private TargetSource target;
 
-    // 方法拦截器
+    /**
+     * 方法拦截器
+     */
     private MethodInterceptor interceptor;
 
     /**

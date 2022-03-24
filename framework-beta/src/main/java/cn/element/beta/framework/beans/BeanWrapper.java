@@ -6,7 +6,7 @@ package cn.element.beta.framework.beans;
  */
 public class BeanWrapper {
     
-    private Object wrappedInstance;
+    private final Object wrappedInstance;
     
     private Class<?> wrappedClass;
 

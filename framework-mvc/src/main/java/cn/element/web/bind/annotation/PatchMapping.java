@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@RequestMapping(method = RequestMethod.PATCH)
+//@RequestMapping(method = RequestMethod.PATCH)
 public @interface PatchMapping {
 
 //	/**

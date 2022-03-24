@@ -15,7 +15,7 @@ import java.util.Locale;
  */
 public class ViewResolver {
     
-    private final String DEFAULT_TEMPLATE_SUFFIX = ".html";
+    private static final String DEFAULT_TEMPLATE_SUFFIX = ".html";
     
     private final File templateRootDir;
     

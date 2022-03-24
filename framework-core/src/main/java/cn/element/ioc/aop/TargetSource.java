@@ -26,8 +26,6 @@ public class TargetSource {
      * 个 target 可能是 JDK 代理 创建也可能是 CGlib 创建，为了保证都能正确的
      * 获取到结果，这里需要增加判读
      * ClassUtils.isCglibProxyClass(clazz)
-     *
-     * @return the type of targets returned by this {@link TargetSource}
      */
     public Class<?>[] getInterfaces() {
         Class<?> clazz = this.target.getClass();
