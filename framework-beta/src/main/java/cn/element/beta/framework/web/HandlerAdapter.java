@@ -1,11 +1,14 @@
 package cn.element.beta.framework.web;
 
 import cn.element.web.bind.annotation.RequestParam;
+import cn.element.web.bind.annotation.ResponseBody;
 import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +19,8 @@ import java.util.Map;
  * 核心方法是handle()
  */
 public class HandlerAdapter {
+    
+//    private static final ObjectMapper MAPPER = new ObjectMapper();
     
     public boolean supports(Object handler) {
         return (handler instanceof HandlerMapping);
@@ -87,11 +92,16 @@ public class HandlerAdapter {
         }
         
         // 4.从handler中取出Controller,Method,然后利用反射机制进行调用
-        Object result = handlerMapping.getMethod().invoke(handlerMapping.getController(), paramValues);
+        Method method = handlerMapping.getMethod();
+        Object result = method.invoke(handlerMapping.getController(), paramValues);
         
         if (result == null) {
             return null;
         }
+        
+//        if (method.isAnnotationPresent(ResponseBody.class)) {
+//            return MAPPER.writeValueAsString(result);
+//        }
         
         boolean flag = handlerMapping.getMethod().getReturnType() == ModelAndView.class;
         

@@ -9,7 +9,6 @@
     <version>1.0-RELEASED</version>
 
     <dependencies>
-
         <!--引入自定义的内核框架CORE-->
         <dependency>
             <groupId>cn.element</groupId>
@@ -29,6 +28,18 @@
             <groupId>cn.element</groupId>
             <artifactId>framework-orm</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+            <version>1.2.8</version>
         </dependency>
     </dependencies>
 

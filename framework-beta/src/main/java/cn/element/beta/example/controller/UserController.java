@@ -7,6 +7,7 @@ import cn.element.ioc.beans.factory.annotation.Autowired;
 import cn.element.ioc.stereotype.Controller;
 import cn.element.web.bind.annotation.RequestMapping;
 import cn.element.web.bind.annotation.RequestParam;
+import cn.element.web.bind.annotation.ResponseBody;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @ResponseBody
     @RequestMapping("/list")
     public ResponseEntity<List<User>> list() {
         List<User> list = userService.list();
