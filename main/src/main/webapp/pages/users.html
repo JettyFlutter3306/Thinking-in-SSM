@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -22,12 +23,63 @@
       </div>
     </div>
 
-    <div class="content" id="app">
-      <div class="container-fluid">
-        <div class="row">
-          <h2>这是用户管理界面</h2>
-        </div>
-      </div>
+    <div id="app">
+      <el-card>
+        <el-button type="primary" round @Click="handleDelete(idList)">批量删除</el-button>
+        <el-table
+          v-loading="loading"
+          :data="users"
+          stripe
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+        >
+          <el-table-column
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            type="index"
+            width="50">
+          </el-table-column>
+          <el-table-column
+            prop="username"
+            label="用户名"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="password"
+            label="密码"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="phone"
+            label="手机">
+          </el-table-column>
+          <el-table-column
+            prop="createTime"
+            label="创建时间">
+          </el-table-column>
+          <el-table-column
+            label="操作"
+          >
+            <template slot-scope="scope">
+              <el-button type="danger" icon="el-icon-delete" circle @Click="handleDelete([scope.row.id])"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <el-pagination
+          background
+          :hide-on-single-page="true"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="pageNum"
+          :page-sizes="[5, 10, 20, 100]"
+          :page-size="pageSize"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total">
+        </el-pagination>
+      </el-card>
     </div>
   </div>
 </div>
@@ -37,20 +89,68 @@
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="dist/js/adminlte.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
+  const mockData = [
+    { id: 1, username: '洛必达', password: '123456', phone: '13770366999', createTime: '2020-05-11 20:00:00'},
+    { id: 2, username: '莱布尼茨', password: '123456', phone: '13770366999', createTime: '2020-09-11 20:00:00'},
+    { id: 3, username: '牛顿', password: '123456', phone: '13770366999', createTime: '2020-07-11 20:00:00'},
+    { id: 4, username: '特朗普', password: '654321', phone: '13770366999', createTime: '2020-01-11 20:00:00'},
+    { id: 5, username: '普京', password: '852369', phone: '13770366999', createTime: '2020-01-11 20:00:00'},
+    { id: 6, username: '洛必达', password: '123456', phone: '13770366999', createTime: '2020-05-11 20:00:00'},
+    { id: 7, username: '莱布尼茨', password: '123456', phone: '13770366999', createTime: '2020-09-11 20:00:00'},
+    { id: 8, username: '牛顿', password: '123456', phone: '13770366999', createTime: '2020-07-11 20:00:00'},
+    { id: 9, username: '特朗普', password: '654321', phone: '13770366999', createTime: '2020-01-11 20:00:00'},
+    { id: 10, username: '普京', password: '852369', phone: '13770366999', createTime: '2020-01-11 20:00:00'},
+    { id: 11, username: '洛必达', password: '123456', phone: '13770366999', createTime: '2020-05-11 20:00:00'},
+    { id: 12, username: '莱布尼茨', password: '123456', phone: '13770366999', createTime: '2020-09-11 20:00:00'},
+    { id: 13, username: '牛顿', password: '123456', phone: '13770366999', createTime: '2020-07-11 20:00:00'},
+    { id: 14, username: '特朗普', password: '654321', phone: '13770366999', createTime: '2020-01-11 20:00:00'},
+  ]
+  
   new Vue({
     el: '#app',
     data: {
-      users: []
+      loading: false,
+      users: [],
+      pageNum: 1,
+      pageSize: 5,
+      total: 0,
+      search: '',
+      multipleSelection: []
     },
     methods: {
-      
+      init() {
+        this.total = mockData.length
+        const start = (this.pageNum - 1) * this.pageSize
+        const end = start + this.pageSize
+        this.users = mockData.slice(start, end)
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`)
+        this.pageSize = val
+        this.init()
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`)
+        this.pageNum = val
+        this.init()
+      },
+      handleDelete(idList) {
+        console.log("被删除的id列表是: ", idList)
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+        console.log(this.multipleSelection)
+      }
     },
     computed: {
-      
+       idList() {
+         return this.multipleSelection.map(item => item.id)
+       }
     },
     created() {
-      console.log('Vue初始化成功!')
+      this.init()
     }
   })
 </script>
