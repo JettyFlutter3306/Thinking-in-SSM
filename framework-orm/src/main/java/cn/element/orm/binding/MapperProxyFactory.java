@@ -1,7 +1,8 @@
 package cn.element.orm.binding;
 
+import cn.element.orm.session.SqlSession;
+
 import java.lang.reflect.Proxy;
-import java.util.Map;
 
 /**
  * 代理类工厂
@@ -16,7 +17,7 @@ public class MapperProxyFactory<T> {
         this.mapperInterface = mapperInterface;
     }
     
-    public T newInstance(Map<String, String> sqlSession) {
+    public T newInstance(SqlSession sqlSession) {
         MapperProxy<T> mapperProxy = new MapperProxy<>(sqlSession, mapperInterface);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, mapperProxy);
     }
