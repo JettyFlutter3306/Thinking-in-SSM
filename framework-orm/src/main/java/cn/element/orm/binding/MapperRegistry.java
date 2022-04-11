@@ -1,5 +1,6 @@
 package cn.element.orm.binding;
 
+import cn.element.orm.session.Configuration;
 import cn.element.orm.session.SqlSession;
 import cn.hutool.core.lang.ClassScanner;
 
@@ -16,6 +17,12 @@ import java.util.Set;
  * 其实这步就包装了我们上一章节手动操作实例化的过程，更加方便在 DefaultSqlSession 中获取 Mapper 时进行使用。
  */
 public class MapperRegistry {
+    
+    private final Configuration config;
+
+    public MapperRegistry(Configuration config) {
+        this.config = config;
+    }
 
     /**
      * 将已经添加的映射器代理加入到HashMap

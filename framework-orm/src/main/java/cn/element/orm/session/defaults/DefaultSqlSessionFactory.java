@@ -1,6 +1,6 @@
 package cn.element.orm.session.defaults;
 
-import cn.element.orm.binding.MapperRegistry;
+import cn.element.orm.session.Configuration;
 import cn.element.orm.session.SqlSession;
 import cn.element.orm.session.SqlSessionFactory;
 
@@ -11,14 +11,14 @@ import cn.element.orm.session.SqlSessionFactory;
  */
 public class DefaultSqlSessionFactory implements SqlSessionFactory {
 
-    private final MapperRegistry mapperRegistry;
+    private final Configuration configuration;
 
-    public DefaultSqlSessionFactory(MapperRegistry mapperRegistry) {
-        this.mapperRegistry = mapperRegistry;
+    public DefaultSqlSessionFactory(Configuration configuration) {
+        this.configuration = configuration;
     }
-    
+
     @Override
     public SqlSession openSession() {
-        return new DefaultSqlSession(mapperRegistry);
+        return new DefaultSqlSession(configuration);
     }
 }
