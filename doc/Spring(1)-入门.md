@@ -8,7 +8,7 @@
 
 
 
-## 第1章 Spring概述 
+## 一. Spring概述 
 
 ### 1.1 Spring概述  
 
@@ -61,7 +61,6 @@
       <version>1.0-SNAPSHOT</version>
       
       <dependencies>
-  
           <dependency>
               <groupId>org.springframework</groupId>
               <artifactId>spring-context</artifactId>
@@ -91,11 +90,10 @@
               <artifactId>commons-logging</artifactId>
               <version>1.1.1</version>
           </dependency>
-  
       </dependencies>
   </project>
   ~~~
-
+  
 - 在idea中创建Spring的**配置文件**
 
   ~~~xml
@@ -106,10 +104,6 @@
   
   </beans>
   ~~~
-
-
-
-
 
 
 
@@ -130,8 +124,6 @@
 ~~~
 
 	2. 下载lombok插件
-
-
 
 
 
@@ -174,8 +166,6 @@
    }
    ~~~
    
-   # 
-   
 3. 创建Spring配置文件
 
    ~~~xml
@@ -214,9 +204,7 @@
    
    
 
-
-
-## 第2章 IOC容器和Bean的配置
+## 二. IOC容器和Bean的配置
 
 ### 2.1 IOC和DI
 
@@ -1447,7 +1435,7 @@ xml配置
 - @Inject
   	@Inject和@Autowired注解一样也是按类型注入匹配的bean，但没有reqired属性。
 
-## 第3章 AOP前奏
+## 三. AOP前奏
 
 ### 3.1 提出问题
 
@@ -1602,7 +1590,7 @@ properties.put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
 
 
-## 第4章  AOP概述
+## 四. AOP概述
 
 ### 4.1 AOP概述
 
@@ -1635,7 +1623,15 @@ properties.put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
 #### 4.2.3 通知(Advice)
 
-切面必须要完成的各个具体工作,也叫做增强
+切面必须要完成的各个具体工作,也叫做增强,简单来说就是**增强的功能**.
+
+通知通常分为5种:
+
+- **前置通知: 在进入切入点之前调用**
+- **后置通知: 在离开切入点之后调用**
+- **环绕通知: 在切入点前后都调用**
+- **方法返回通知: 在切入点方法正常返回之后调用**
+- **异常通知: 在切入点方法抛出异常之后调用**
 
 #### 4.2.4 目标(Target)
 
@@ -1647,17 +1643,23 @@ properties.put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
 #### 4.2.6 连接点(Joinpoint)
 
-横切关注点在程序代码中的具体体现，对应程序执行的某个特定位置。例如：类某个方法调用前、调用后、方法捕获到异常后等。在应用程序中可以使用横纵两个坐标来定位一个具体的连接点：
+横切关注点在程序代码中的具体体现，对应程序执行的某个特定位置。例如：类某个方法调用前、调用后、方法捕获到异常后等。在应用程序中可以使用横纵两个坐标来定位一个具体的连接点,简单来讲就是**方法可以被增强的位置**.
 
 ![img](assets/image-20200301215200124.png) 
 
 #### 4.2.7 切入点(pointcut)：
 
-定位连接点的方式。每个类的方法中都包含多个连接点，所以连接点是类中客观存在的事物。如果把连接点看作数据库中的记录，那么切入点就是查询条件——AOP可以通过切入点定位到特定的连接点。切点通过org.springframework.aop.Pointcut 接口进行描述，它使用类和方法作为连接点的查询条件。
+定位连接点的方式。每个类的方法中都包含多个连接点，所以连接点是类中客观存在的事物。如果把连接点看作数据库中的记录，那么切入点就是查询条件——AOP可以通过切入点定位到特定的连接点。切点通过org.springframework.aop.Pointcut 接口进行描述，它使用类和方法作为连接点的查询条件。简单来说,切入点就是**实际被增强的方法**.
 
 
 
-#### 4.2.8 图解
+#### 4.2.8 织入(Weaving):
+
+将切面和其他对象连接起来,并创建代理对象的过程称为**织入**.
+
+
+
+#### 4.2.9 图解
 
 ![image-20200301215734072](assets/image-20200301215734072.png) 
 
@@ -1671,7 +1673,7 @@ properties.put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 
 在Spring2.0以上版本中，可以使用基于AspectJ注解或基于XML配置的AOP。
 
-Spring AOP旨在通过Spring IoC提供一个简单的AOP实现，以解决编码人员面临的最常出现的问题。这并不是完整的AOP解决方案，它只能用于Spring容器管理的beans。
+**Spring AOP**旨在通过Spring IoC提供一个简单的AOP实现，以解决编码人员面临的最常出现的问题。这并不是完整的AOP解决方案，它只能用于Spring容器管理的beans。
 
 AspectJ是最原始的AOP实现技术，提供了完整的AOP解决方案。AspectJ更为健壮，相对于Spring AOP也显得更为复杂。值得注意的是，AspectJ能够被应用于所有的领域对象。
 
@@ -1681,7 +1683,6 @@ AspectJ是最原始的AOP实现技术，提供了完整的AOP解决方案。Aspe
 
   ~~~xml
   <dependencies>
-  
       <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-context</artifactId>
@@ -1705,8 +1706,6 @@ AspectJ是最原始的AOP实现技术，提供了完整的AOP解决方案。Aspe
           <version>4.12</version>
           <scope>test</scope>
       </dependency>
-  
-  
   </dependencies>
   ~~~
 
@@ -1732,11 +1731,11 @@ AspectJ是最原始的AOP实现技术，提供了完整的AOP解决方案。Aspe
 - 在AspectJ注解中，切面只是一个带有@Aspect注解的Java类，它往往要包含很多通知。
 - 通知是标注有某种注解的简单的Java方法。
 - AspectJ支持5种类型的通知注解：
-  1. @Before：前置通知，在方法执行之前执行
-  2. @After：后置通知，在方法执行之后执行
-  3. @AfterRunning：返回通知，在方法返回结果之后执行
-  4. @AfterThrowing：异常通知，在方法抛出异常之后执行
-  5.  @Around：环绕通知，围绕着方法执行
+  1. **@Before：前置通知，在方法执行之前执行**
+  2. **@After：后置通知，在方法执行之后执行**
+  3. **@AfterRunning：返回通知，在方法返回结果之后执行**
+  4. **@AfterThrowing：异常通知，在方法抛出异常之后执行**
+  5.  **@Around：环绕通知，围绕着方法执行**
 
 
 
@@ -1751,7 +1750,7 @@ AspectJ是最原始的AOP实现技术，提供了完整的AOP解决方案。Aspe
 						//最大值: 01111111 11111111 11111111 11111111   0x7fffffff
 						//最小值:	 10000000 00000000 00000000 00000000   0x80000000	 
 public class LoggingAspect { 
-	@Before(value="execution( public int  cn.justweb.calculator.impl.ArithmeticCalculatorImpl.*(int,int))")
+	@Before(value="execution( public int  cn.element.calculator.impl.ArithmeticCalculatorImpl.*(int,int))")
 	public void beforeMethod() {
 		System.out.println("前置通知");
 	}
@@ -1763,9 +1762,7 @@ public class LoggingAspect {
 
 
 
-
-
-## 第5章 AOP细节
+## 五. AOP细节
 
 ### 5.1 切入点表达式 
 
@@ -1779,11 +1776,13 @@ public class LoggingAspect {
 
   execution([权限修饰符] [返回值类型] [简单类名/全类名] [方法名]([参数列表]))
 
+  execution(public * com.example.spring.Demo.method(..))
+
 - 案例
 
-  | 表达式 | execution(* com.justweb.spring.ArithmeticCalculator.*(..))   |
+  | 表达式 | execution(* com.example.spring.ArithmeticCalculator.*(..))   |
   | ------ | ------------------------------------------------------------ |
-  | 含义   | ArithmeticCalculator接口中声明的所有方法。第一个“*”代表任意返回值。第二个“*”代表任意方法。“..”匹配任意数量、任意类型的参数。若目标类、接口与该切面类在同一个包中可以省略包名。 |
+  | 含义   | ArithmeticCalculator接口中声明的所有方法。第一个 * 代表任意返回值。第二个 * 代表任意方法。.. 匹配任意数量、任意类型的参数。若目标类、接口与该切面类在同一个包中可以省略包名。 |
 
   | 表达式 | execution(public * ArithmeticCalculator.*(..)) |
   | ------ | ---------------------------------------------- |
@@ -1806,7 +1805,7 @@ public class LoggingAspect {
   | 表达式 | execution (* .add(int,..)) ***\*\|\|\**** execution(* *.sub(int,..)) |
   | ------ | ------------------------------------------------------------ |
   | 含义   | 任意类中第一个参数为int类型的add方法或sub方法                |
-  | 表达式 | !execution (* *.add(int,..))                                 |
+  | 表达式 | **!execution (* *.add(int,..))**                             |
   | 含义   | 匹配不是任意类中第一个参数为int类型的add方法                 |
 
 
@@ -1839,15 +1838,11 @@ public class LoggingAspect {
 						//最大值: 01111111 11111111 11111111 11111111   0x7fffffff
 						//最小值:	 10000000 00000000 00000000 00000000   0x80000000	 
 public class LoggingAspect { 
-	
-	
 	/**
 	 * 定义切入点表达式
 	 */
 	@Pointcut(value="execution(* cn.justweb.calculator.*.*(..))")
 	public void declarePointCut() {}
-	
-	
 	
 	/**
 	 * 通知: 前置通知  后置通知 返回通知 异常通知 环绕通知
@@ -1868,7 +1863,6 @@ public class LoggingAspect {
 		String methodName = joinPoint.getSignature().getName();
 		//参数列表
 		Object [] args = joinPoint.getArgs();
-		
 		System.out.println("LoggingAspect==>The method "+methodName+" begin with : " + Arrays.toString(args) );
 	}
 	
@@ -1885,7 +1879,6 @@ public class LoggingAspect {
 	//@After(value="execution(* cn.justweb.spring.aop.aspectj.*.*(..))")
 	@After(value="declarePointCut()")
 	public void afterMethod(JoinPoint joinPoint) {
-		
 		String methodName = joinPoint.getSignature().getName();
 		System.out.println("LoggingAspect==>The method "+ methodName + " ends .");
 	}
@@ -1899,9 +1892,7 @@ public class LoggingAspect {
 	//@AfterReturning(value="execution(* cn.justweb.spring.aop.aspectj.*.*(..))",returning="result")
 	@AfterReturning(value="declarePointCut()",returning="result")
 	public void afterReturningMethod(JoinPoint joinPoint, Object result ) {
-		
 		String methodName = joinPoint.getSignature().getName();
-		
 		System.out.println("LoggingAspect==>The method " + methodName + "end with : " + result );
 		
 	}
@@ -1925,10 +1916,9 @@ public class LoggingAspect {
 	 */
 	
 	//@Around(value="execution(* cn.justweb.spring.aop.aspectj.*.*(..))")
-	public Object  aroudMethod(ProceedingJoinPoint pjp ) {
-		
+	public Object  aroudMethod(ProceedingJoinPoint pjp) {
 		try {
-			//前置
+			//前置通知
 			
 			//执行目标方法
 			Object result = pjp.proceed();
@@ -1941,7 +1931,6 @@ public class LoggingAspect {
 		} finally {
 			//后置通知
 		}
-		
 		return -100;
 	}
 	
@@ -1959,17 +1948,17 @@ public class LoggingAspect {
 2. 一个切面可以包括一个或者多个通知。
 3. 通知所使用的注解的值往往是切入点表达式。
 
-#### 5.3.2前置通知
+#### 5.3.2 前置通知
 
 1. 前置通知：在方法执行之前执行的通知
 2. 使用@Before注解
 
-#### 5.3.3后置通知
+#### 5.3.3 后置通知
 
 1. 后置通知：后置通知是在连接点完成之后执行的，即连接点返回结果或者抛出异常的时候
 2. 使用@After注解
 
-#### 5.3.4返回通知
+#### 5.3.4 返回通知
 
 1. 返回通知：无论连接点是正常返回还是抛出异常，后置通知都会执行。如果只想在连接点返回的时候记录日志，应使用返回通知代替后置通知。
 2. 使用@AfterReturning注解,在返回通知中访问连接点的返回值
@@ -1977,13 +1966,13 @@ public class LoggingAspect {
    - 必须在通知方法的签名中添加一个同名参数。在运行时Spring AOP会通过这个参数传递返回值
    - 原始的切点表达式需要出现在pointcut属性中	
 
-#### 5.3.5异常通知
+#### 5.3.5 异常通知
 
 1. 异常通知：只在连接点抛出异常时才执行异常通知
 2. 将throwing属性添加到@AfterThrowing注解中，也可以访问连接点抛出的异常。Throwable是所有错误和异常类的顶级父类，所以在异常通知方法可以捕获到任何错误和异常。
 3. 如果只对某种特殊的异常类型感兴趣，可以将参数声明为其他异常的参数类型。然后通知就只在抛出这个类型及其子类的异常时才被执行
 
-#### 5.3.6环绕通知
+#### 5.3.6 环绕通知
 
 1. 环绕通知是所有通知类型中功能最为强大的，能够全面地控制连接点，甚至可以控制是否执行连接点。
 2. 对于环绕通知来说，连接点的参数类型必须是ProceedingJoinPoint。它是 JoinPoint的子接口，允许控制何时执行，是否执行连接点。
@@ -2006,7 +1995,7 @@ public class LoggingAspect {
 
 
 
-## 第6章 以XML方式配置切面 
+## 六. 以XML方式配置切面 
 
 ### 6.1 概述  
 
@@ -2020,21 +2009,21 @@ public class LoggingAspect {
 
 ### 6.3 声明切入点
 
-1. 切入点使用<aop:pointcut>元素声明。
-2. 切入点必须定义在<aop:aspect>元素下，或者直接定义在<aop:config>元素下。
-   - 定义在<aop:aspect>元素下：只对当前切面有效
-   - 定义在<aop:config>元素下：对所有切面都有效
+1. 切入点使用`<aop:pointcut>`元素声明。
+2. 切入点必须定义在`<aop:aspect>`元素下，或者直接定义在`<aop:config>`元素下。
+   - 定义在`<aop:aspect>`元素下：只对当前切面有效
+   - 定义在`<aop:config>`元素下：对所有切面都有效
 3. 基于XML的AOP配置不允许在切入点表达式中用名称引用其他切入点。
 
 ### 6.4 声明通知
 
 1. 在aop名称空间中，每种通知类型都对应一个特定的XML元素。
-2. 通知元素需要使用<pointcut-ref>来引用切入点，或用<pointcut>直接嵌入切入点表达式。
+
+2. 通知元素需要使用`<pointcut-ref>`来引用切入点，或用`<pointcut>`直接嵌入切入点表达式。
+
 3. method属性指定切面类中通知方法的名称
 
-
-
-
+   
 
 切面类：
 
@@ -2042,38 +2031,31 @@ public class LoggingAspect {
 @Component  // 标识为一个组件,受Spring的IOC容器管理
 public class LoggingAspect { 
 	
-	
 	public void beforeMethod(JoinPoint joinPoint ) {
 		//方法名  
 		String methodName = joinPoint.getSignature().getName();
 		//参数列表
 		Object [] args = joinPoint.getArgs();
-		
 		System.out.println("LoggingAspect==>The method "+methodName+" begin with : " + Arrays.toString(args) );
 	}
 	
 	public void afterMethod(JoinPoint joinPoint) {
-		
 		String methodName = joinPoint.getSignature().getName();
 		System.out.println("LoggingAspect==>The method "+ methodName + " ends .");
 	}
 	
 	public void afterReturningMethod(JoinPoint joinPoint,Object result ) {
-		
 		String methodName = joinPoint.getSignature().getName();
-		
 		System.out.println("LoggingAspect==>The method " + methodName + "end with : " + result );
 		
 	}
 	
 	public void afterThrowingMethod(JoinPoint joinPoint,ArithmeticException  ex ) {
 		String methodName = joinPoint.getSignature().getName();
-		
 		System.out.println("LoggingAspect==>The method " + methodName + " occurs Exception : " + ex);
 	}
 	
-	public Object  aroudMethod(ProceedingJoinPoint pjp ) {
-		
+	public Object  aroudMethod(ProceedingJoinPoint pjp) {
 		try {
 			//前置
 			
@@ -2104,12 +2086,9 @@ xml配置
 <!--组件扫描-->
 <context:component-scan base-package="cn.justweb.aop_xml.calculator"/>
 
-
 <!--配置aop-->
 <aop:config>
-
     <aop:pointcut id="myPointCut" expression="execution(* cn.justweb.aop_xml.calculator.impl.ArithmeticCalculatorImpl1.*(..))"/>
-
     <!--切面-->
     <aop:aspect ref="loggingAspect1" order="1">
         <!--通知-->
@@ -2124,9 +2103,7 @@ xml配置
         <aop:after method="after" pointcut-ref="myPointCut"/>
         <!--环绕通知-->
         <aop:around method="around" pointcut-ref="myPointCut"/>
-
     </aop:aspect>
-
 </aop:config>
 ~~~
 
@@ -2158,7 +2135,7 @@ public static void main(String[] args) {
 
 
 
-## 第7章 JdbcTemplate 
+## 七. JdbcTemplate 
 
 ### 7.1  概述
 
@@ -2174,7 +2151,6 @@ public static void main(String[] args) {
 
 ~~~~xml
 <dependencies>
-
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -2229,11 +2205,10 @@ public static void main(String[] args) {
         <artifactId>aspectjweaver</artifactId>
         <version>1.9.4</version>
     </dependency>
-
 </dependencies>
 ~~~~
 
-#### 7.2.2创建连接数据库基本信息属性文件
+#### 7.2.2 数据库配置文件
 
 ~~~properties
 jdbc.driver=com.mysql.jdbc.Driver
@@ -2242,7 +2217,7 @@ jdbc.username=root
 jdbc.password=****
 ~~~
 
-#### 7.2.3在Spring配置文件中配置相关的bean
+#### 7.2.3 Spring配置文件
 
 1. 数据源对象
 
@@ -2276,67 +2251,53 @@ jdbc.password=****
 
    ~~~java
    /**
-   	 * update(): 完成增 删  改 操作. 
-   	 * 
-   	 * 课下作业:  练习  删除  修改 操作.
-   	 */
+    * update(): 完成增 删  改 操作. 
+    */
    @Test
    public void testUpdate() {
        String sql = "insert into tbl_employee(last_name,gender,descr) values(?,?,?)" ;
-   
        jt.update(sql, "孟老湿", 1 , "Java界的苍老师");
    }
    ~~~
-
+   
    
 
 2. 批量增删改
 
    ~~~java
    /**
-   	 * batchUpdate(): 完成批量增删改操作 
-   	 * 
-   	 * 课下作业: 练习批量 修改  删除 操作 
-   	 * 
-   	 */
+    * batchUpdate(): 完成批量增删改操作 
+    */
    @Test
    public void testBatchUpdate() {
        String sql = "insert into tbl_employee(last_name,gender,descr) values(?,?,?)" ;
-   
        List<Object [] > batchArgs = new ArrayList<>();
-   
-       batchArgs.add( new Object[] {"太旺",1 ,"太旺小时候"});
-       batchArgs.add( new Object[] {"木旺",1 ,"木旺长大后"});
-       batchArgs.add( new Object[] {"大旺",1 ,"大旺泰国一日游后"});
-   
+       batchArgs.add(new Object[] {"太旺",1 ,"太旺小时候"});
+       batchArgs.add(new Object[] {"木旺",1 ,"木旺长大后"});
+       batchArgs.add(new Object[] {"大旺",1 ,"大旺泰国一日游后"});
        jt.batchUpdate(sql, batchArgs);
    }
    ~~~
-
    
-
+   
+   
 3. 查询单行
 
    ~~~java
-   	/**
-   	 * queryForObject(): 查询返回一个对象. 
-   	 * 	 1. 查询一条数据返回一个JavaBean对象 √
-   	 *   2. 查询返回单个值. 
-   	 */
-   
-   	
+   /**
+    * queryForObject(): 查询返回一个对象. 
+    * 	 1. 查询一条数据返回一个JavaBean对象 √
+    *   2. 查询返回单个值. 
+    */	
    @Test
    public void testQueryForObjectReturnJavaBean() {
        String sql = "select id,last_name,gender,descr from tbl_employee where id = ? ";
    
        //查询数据返回结果集后, ResultSet  , 我们需要将每条结果中的每个字段的值赋值给JavaBean对象的每个属性. 
        //Spring只需要我们通过RowMapper指定一个JavaBean的类型即可.
-   
        RowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-   
        Employee employee = jt.queryForObject(sql, rowMapper, 1001); 
-   
-       System.out.println(employee );
+       System.out.println(employee);
    }
    
    
@@ -2347,22 +2308,15 @@ jdbc.password=****
 4. 查询多行
 
    ~~~java
-   
-   
    /**
-   	 * query(): 查询多条数据返回多个JavaBean对象的集合. 
-   	 */
-   
+    * query(): 查询多条数据返回多个JavaBean对象的集合. 
+    */
    @Test
    public void testQuery() {
        String sql = "select id,last_name,gender,descr from tbl_employee" ;
-   
        RowMapper<Employee> rowMapper = new BeanPropertyRowMapper<>(Employee.class);
-   
        List<Employee > emps = jt.query(sql, rowMapper);
-   
        System.out.println(emps );
-   
    }
    ~~~
 
@@ -2371,17 +2325,15 @@ jdbc.password=****
 5. 查询单一值
 
    ~~~java
-   	/**
-   	 * queryForObject(): 查询返回一个对象. 
-   	 * 	 1. 查询一条数据返回一个JavaBean对象
-   	 *   2. 查询返回单个值. √
-   	 */
+   /**
+    * queryForObject(): 查询返回一个对象. 
+    * 	 1. 查询一条数据返回一个JavaBean对象
+    *   2. 查询返回单个值. √
+    */
    @Test
    public void testQueryForObjectReturnValue() {
        String sql = "select count(id) from tbl_employee" ;
-   
        Integer result = jt.queryForObject(sql, Integer.class);
-   
        System.out.println(result);
    }
    ~~~
@@ -2408,7 +2360,7 @@ public class EmployeeDao {
 
 ~~~
 
-## 第8章  声明式事务管理
+## 八. 声明式事务管理
 
 ### 8.1事务概述
 
@@ -2482,7 +2434,7 @@ CREATE TABLE book_stock (
   isbn VARCHAR (50) PRIMARY KEY,
   stock INT
   ) ;
-
+  
 CREATE TABLE account (
   username VARCHAR (50) PRIMARY KEY,
   balance INT

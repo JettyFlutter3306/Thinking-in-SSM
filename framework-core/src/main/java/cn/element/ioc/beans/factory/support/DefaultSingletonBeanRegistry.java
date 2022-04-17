@@ -41,7 +41,7 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>();
     
     /**
-     * 二级缓存，提前暴漏对象，没有完全实例化的对象
+     * 二级缓存，提前暴露对象，没有完全实例化的对象
      * Cache of early singleton objects: bean name --> bean instance
      */
     protected final Map<String, Object> earlySingletonObjects = new HashMap<>();

@@ -20,7 +20,7 @@ public class MappedStatement {
     }
 
     /**
-     * 建造者
+     * 建造者模式
      */
     public static class Builder {
 
