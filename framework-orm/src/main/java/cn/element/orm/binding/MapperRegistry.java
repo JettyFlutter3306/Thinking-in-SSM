@@ -33,7 +33,7 @@ public class MapperRegistry {
         MapperProxyFactory<T> factory = (MapperProxyFactory<T>) knownMappers.get(type);
         
         if (factory == null) {
-            throw new RuntimeException("Type " + type + "is not known to the MapperRegistry");
+            throw new RuntimeException("Type " + type + " is not known to the MapperRegistry");
         }
 
         try {
