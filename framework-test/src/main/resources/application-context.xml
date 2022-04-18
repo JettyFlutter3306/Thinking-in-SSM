@@ -1,6 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation=
+               "http://www.springframework.org/schema/beans 
+                http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd"
+>
+    <!-- 使用bean元素定义一个由IOC容器创建的对象 -->
+    <!-- class属性指定用于创建bean的全类名 -->
+    <!-- id属性指定用于引用bean实例的标识 -->
+    <bean id="book" class="cn.element.spring.pojo.Book">
+        <!-- 使用property子元素为bean的属性赋值 -->
+        <property name="isbn" value="1001"/>
+        <property name="bookName" value="指环王"/>
+    </bean>
 
+    <bean id="book2" class="cn.element.spring.pojo.Book">
+        <!-- 使用property子元素为bean的属性赋值 -->
+        <property name="isbn" value="1003"/>
+        <property name="bookName" value="霍比特人"/>
+    </bean>
+
+    <bean id="student" class="cn.element.spring.pojo.Student">
+        <constructor-arg index="0" value="1" type="java.lang.Integer"/>
+        <constructor-arg index="1" value="张三" type="java.lang.String"/>
+        <constructor-arg index="2" value="20" type="int"/>
+    </bean>
+
+    <bean id="shop" class="cn.element.spring.pojo.Shop">
+        <property name="shopId" value="1"/>
+        <property name="shopName" value="天猫小店"/>
+        <property name="book" ref="book"/>
+        <property name="book.bookName" value="金瓶梅"/>
+    </bean>
+
+    <bean id="shop1" class="cn.element.spring.pojo.Shop">
+        <property name="shopId" value="1"/>
+        <property name="shopName" value="天猫小店"/>
+        <property name="book">
+            <bean class="cn.element.spring.pojo.Book">
+                <property name="isbn" value="1005"/>
+                <property name="bookName" value="三国演义"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--Bean内部嵌套集合-->
+    <bean id="library" class="cn.element.spring.pojo.Library">
+        <property name= "categories">
+            <!-- 以字面量为值的List集合 -->
+            <set>
+                <value>历史</value>
+                <value>军事</value>
+            </set>
+        </property>
+        <property name= "books">
+            <!-- 以bean的引用为值的List集合 -->
+            <list>
+                <ref bean="book"/>
+                <ref bean="book2"/>
+            </list>
+        </property>
+        <property name="bookMap">
+            <map key-type="java.lang.Integer" value-type="cn.element.spring.pojo.Book">
+                <entry key="1001" value="book"/>
+                <entry key="1003" value="book2"/>
+            </map>
+        </property>
+    </bean>
+
+    <!--配置集合类型的Bean-->
+    <util:list id="bookList">
+        <ref bean="book"/>
+        <ref bean="book2"/>
+    </util:list>
+
+    <util:list id="list">
+        <value>1</value>
+        <value>2</value>
+        <value>3</value>
+        <value>4</value>
+    </util:list>
+
+    <util:list id="categoryList">
+        <value>编程</value>
+        <value>简维</value>
+        <value>小说</value>
+        <value>评书</value>
+    </util:list>
+
+    <!--引入外部配置文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!-- 从properties属性文件中引入属性值 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="url" value="${url}"/>
+        <property name="driverClassName" value="${driverClass}"/>
+    </bean>
 </beans>
