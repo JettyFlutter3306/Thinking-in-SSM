@@ -18,7 +18,7 @@ public class ApiTest04 {
     private final Logger logger = LoggerFactory.getLogger(ApiTest04.class);
 
     @Test
-    public void test_SqlSessionFactory() throws IOException {
+    public void testSqlSessionFactory() throws IOException {
         // 1. 从SqlSessionFactory中获取SqlSession
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
         SqlSession sqlSession = sqlSessionFactory.openSession();

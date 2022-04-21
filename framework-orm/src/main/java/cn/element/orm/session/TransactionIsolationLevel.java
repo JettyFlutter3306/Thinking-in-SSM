@@ -4,7 +4,7 @@ import java.sql.Connection;
 
 public enum TransactionIsolationLevel {
 
-    //包括JDBC支持的5个级别
+    // 包括JDBC支持的5个级别
     NONE(Connection.TRANSACTION_NONE),
     READ_COMMITTED(Connection.TRANSACTION_READ_COMMITTED),
     READ_UNCOMMITTED(Connection.TRANSACTION_READ_UNCOMMITTED),
