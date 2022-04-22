@@ -19,4 +19,13 @@
         <servlet-name>dispatcherServlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+    
+    <filter>
+        <filter-name>requestMethodFilter</filter-name>
+        <filter-class>cn.element.web.filter.RequestMethodFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>requestMethodFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

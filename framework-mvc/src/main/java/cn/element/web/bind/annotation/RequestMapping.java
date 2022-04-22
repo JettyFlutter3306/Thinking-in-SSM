@@ -9,5 +9,5 @@ public @interface RequestMapping {
 
     String value() default "";
     
-//    RequestMethod method();
+    RequestMethod method() default RequestMethod.HEAD;
 }

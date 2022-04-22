@@ -1,7 +1,13 @@
 package cn.element.web.servlet;
 
+import cn.element.web.bind.annotation.RequestBody;
+import cn.element.web.bind.annotation.RequestMapping;
 import cn.element.web.bind.annotation.RequestParam;
+import cn.element.web.filter.HttpMethodRequestWrapper;
+import cn.element.web.util.HttpServletRequestReader;
 import cn.hutool.core.util.StrUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +23,10 @@ import java.util.Map;
  * Method实参列表的对应关系,完成参数值的类型转换工作
  * 核心方法是handle()
  */
+@Slf4j
 public class HandlerAdapter {
     
-//    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     
     public boolean supports(Object handler) {
         return (handler instanceof HandlerMapping);
@@ -30,9 +37,16 @@ public class HandlerAdapter {
         
         // 每个方法有一个参数列表,这里保存的是形参列表
         Map<String, Integer> paramMapping = new HashMap<>();
+
+        String body = HttpServletRequestReader.getPostData(request);
+        log.debug("请求体: {}", body);
         
         // 这里给出命名参数,记住参数的位置
-        Annotation[][] pa = handlerMapping.getMethod().getParameterAnnotations();
+        Method m = handlerMapping.getMethod();
+        Annotation[][] pa = m.getParameterAnnotations();
+        Class<?>[] pTypes = m.getParameterTypes();
+        
+        int bodyIndex = -1;
         for (int i = 0; i < pa.length; i++) {
             for (Annotation annotation : pa[i]) {
                 if (annotation instanceof RequestParam) {
@@ -41,6 +55,8 @@ public class HandlerAdapter {
                     if (!StrUtil.isBlank(paramName)) {
                         paramMapping.put(paramName, i);
                     }
+                } else if (annotation instanceof RequestBody) {
+                    bodyIndex = i;
                 }
             } 
         }
@@ -80,6 +96,11 @@ public class HandlerAdapter {
             }
         }
         
+        // 假如bodyIndex不为-1那么说明有请求体,请求体只能有一个,这一步就提供了请求体的参数位置
+        if (bodyIndex != -1) {
+            paramValues[bodyIndex] = MAPPER.readValue(body, pTypes[bodyIndex]);
+        }
+        
         if (paramMapping.containsKey(HttpServletRequest.class.getName())) {
             int reqIndex = paramMapping.get(HttpServletRequest.class.getName());
             paramValues[reqIndex] = request;
@@ -94,6 +115,37 @@ public class HandlerAdapter {
         Method method = handlerMapping.getMethod();
         Object result;
         
+        // 验证请求方法是否正确
+        RequestMapping annotation = method.getAnnotation(RequestMapping.class);
+        String name = annotation.method().name();
+        log.debug("目标请求方法应该为: {}", name);
+        
+        HttpMethodRequestWrapper requestToUse;
+        if (request instanceof HttpMethodRequestWrapper) {
+            log.debug("这是经过包装的请求方法");
+            requestToUse = (HttpMethodRequestWrapper) request;
+            if (!StrUtil.equals(requestToUse.getTrueMethod(), name)) {
+                ResponseEntity<Object> entity = ResponseEntity.badRequest();
+                entity.setMsg("Request Method Not Allowed!")
+                      .setStatus(405);
+                ModelAndView mv = new ModelAndView();
+                mv.setResponseEntity(entity);
+                return mv;
+            }
+        } else {
+            log.debug("这是没有经过包装的方法");
+            String requestMethod = request.getMethod();
+
+            if (!StrUtil.equals(requestMethod, name)) {
+                ResponseEntity<Object> entity = ResponseEntity.badRequest();
+                entity.setMsg("Request Method Not Allowed!")
+                      .setStatus(405);
+                ModelAndView mv = new ModelAndView();
+                mv.setResponseEntity(entity);
+                return mv;
+            }
+        }
+
         try {
             result = method.invoke(handlerMapping.getController(), paramValues);
             
