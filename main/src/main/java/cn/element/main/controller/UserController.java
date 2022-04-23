@@ -39,8 +39,8 @@ public class UserController {
     }
     
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public String update() {
-        log.debug("执行更新用户操作...");
+    public String update(@RequestBody User user) {
+        log.debug("执行更新用户操作: {}", user);
         return "更新用户操作成功!";
     }
     
