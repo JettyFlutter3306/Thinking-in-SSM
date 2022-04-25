@@ -2,6 +2,8 @@ package cn.element.orm.session;
 
 import cn.element.orm.binding.MapperRegistry;
 import cn.element.orm.datasource.druid.DruidDataSourceFactory;
+import cn.element.orm.datasource.pooled.PooledDataSourceFactory;
+import cn.element.orm.datasource.unpooled.UnpooledDataSourceFactory;
 import cn.element.orm.mapping.Environment;
 import cn.element.orm.mapping.MappedStatement;
 import cn.element.orm.transaction.jdbc.JdbcTransactionFactory;
@@ -35,6 +37,8 @@ public class Configuration {
     public Configuration() {
         typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registerAlias("DRUID", DruidDataSourceFactory.class);
+        typeAliasRegistry.registerAlias("UNPOOLED", UnpooledDataSourceFactory.class);
+        typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
     }
 
     public void addMappers(String packageName) {
