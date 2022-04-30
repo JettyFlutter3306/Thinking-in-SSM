@@ -23,7 +23,7 @@ public class TestAspect {
         //创建一个计算器实现类
         ArithmeticCalculator arithmeticCalculator = new ArithmeticCalculatorImpl();
 
-        //创建代理对象（代理对象中对每个方法进行了增强。打印日志。）
+        //创建代理对象 代理对象中对每个方法进行了增强 打印日志
         ArithmeticCalculator proxyObject = (ArithmeticCalculator) CalculatorLoggingHandler.createProxy(arithmeticCalculator);
 
         double add = proxyObject.add(1, 2);

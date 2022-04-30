@@ -19,5 +19,11 @@
         <property name="expression" value="execution(* cn.element.ioc.test.stage15.IUserService.*(..))"/>
         <property name="advice" ref="methodInterceptor"/>
     </bean>
+    
+    <bean id="user" class="cn.element.ioc.test.stage15.User">
+        <property name="id" value="1"/>
+        <property name="username" value="Luobida"/>
+        <property name="password" value="123456"/>
+    </bean>
 
 </beans>

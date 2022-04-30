@@ -9,10 +9,12 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class Book {
+public class Account {
     
-    private String isbn;
+    private Integer id;
     
-    private String bookName;
+    private String username;
+    
+    private Integer balance;
 
 }

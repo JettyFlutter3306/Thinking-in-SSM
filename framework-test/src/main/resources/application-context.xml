@@ -71,24 +71,24 @@
     </bean>
 
     <!--配置集合类型的Bean-->
-    <util:list id="bookList">
-        <ref bean="book"/>
-        <ref bean="book2"/>
-    </util:list>
+<!--    <util:list id="bookList">-->
+<!--        <ref bean="book"/>-->
+<!--        <ref bean="book2"/>-->
+<!--    </util:list>-->
 
-    <util:list id="list">
-        <value>1</value>
-        <value>2</value>
-        <value>3</value>
-        <value>4</value>
-    </util:list>
+<!--    <util:list id="list">-->
+<!--        <value>1</value>-->
+<!--        <value>2</value>-->
+<!--        <value>3</value>-->
+<!--        <value>4</value>-->
+<!--    </util:list>-->
 
-    <util:list id="categoryList">
-        <value>编程</value>
-        <value>简维</value>
-        <value>小说</value>
-        <value>评书</value>
-    </util:list>
+<!--    <util:list id="categoryList">-->
+<!--        <value>编程</value>-->
+<!--        <value>简维</value>-->
+<!--        <value>小说</value>-->
+<!--        <value>评书</value>-->
+<!--    </util:list>-->
 
     <!--引入外部配置文件-->
     <context:property-placeholder location="classpath:jdbc.properties"/>

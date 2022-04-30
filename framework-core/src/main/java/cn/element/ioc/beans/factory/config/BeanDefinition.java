@@ -22,7 +22,7 @@ public class BeanDefinition {
 
     private String SCOPE_PROTOTYPE = ConfigurableBeanFactory.SCOPE_PROTOTYPE;
 
-    private Class beanClass;
+    private Class<?> beanClass;
 
     private PropertyValues propertyValues;
 
@@ -36,11 +36,11 @@ public class BeanDefinition {
 
     private boolean prototype = false;
 
-    public BeanDefinition(Class beanClass) {
+    public BeanDefinition(Class<?> beanClass) {
         this(beanClass, null);
     }
 
-    public BeanDefinition(Class beanClass, PropertyValues propertyValues) {
+    public BeanDefinition(Class<?> beanClass, PropertyValues propertyValues) {
         this.beanClass = beanClass;
         this.propertyValues = propertyValues != null ? propertyValues : new PropertyValues();
     }
@@ -51,7 +51,7 @@ public class BeanDefinition {
         this.prototype = SCOPE_PROTOTYPE.equals(scope);
     }
 
-    public Class getBeanClass() {
+    public Class<?> getBeanClass() {
         return beanClass;
     }
 
@@ -59,7 +59,7 @@ public class BeanDefinition {
         return propertyValues;
     }
 
-    public void setBeanClass(Class beanClass) {
+    public void setBeanClass(Class<?> beanClass) {
         this.beanClass = beanClass;
     }
 

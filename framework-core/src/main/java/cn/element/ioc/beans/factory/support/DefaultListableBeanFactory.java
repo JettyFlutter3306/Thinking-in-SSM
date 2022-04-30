@@ -15,7 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 它继承了AbstractAutowireCapableBeanFactory类,也就具备了接口
  * BeanFactory和AbstractBeanFactory等一连串的功能实现,所以有时候会看到
  * 一些类的强制转换,调用某些方法,也是因为强转的类型实现接口或继承了某些类
- *
  */
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
                                         implements BeanDefinitionRegistry,
