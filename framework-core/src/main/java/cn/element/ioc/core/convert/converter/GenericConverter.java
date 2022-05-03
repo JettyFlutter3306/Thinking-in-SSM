@@ -22,7 +22,7 @@ public interface GenericConverter {
      * @param targetType the type descriptor of the field we are converting to
      * @return the converted object
      */
-    Object convert(Object source, Class sourceType, Class targetType);
+    Object convert(Object source, Class<?> sourceType, Class<?> targetType);
 
     /**
      * Holder for a source-to-target class pair.
