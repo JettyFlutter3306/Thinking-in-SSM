@@ -37,6 +37,4 @@ public class ClassPathResource implements Resource {
 
         return is;
     }
-
-
 }

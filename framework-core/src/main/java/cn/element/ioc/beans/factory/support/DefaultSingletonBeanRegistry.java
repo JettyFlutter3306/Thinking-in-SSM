@@ -58,11 +58,11 @@ public class DefaultSingletonBeanRegistry implements SingletonBeanRegistry {
     public Object getSingleton(String beanName) {
         Object singletonObject = singletonObjects.get(beanName);
         
-        if (null == singletonObject) {
+        if (singletonObject == null) {
             singletonObject = earlySingletonObjects.get(beanName);
             
             // 判断二级缓存中是否有对象，这个对象就是代理对象，因为只有代理对象才会放到三级缓存中
-            if (null == singletonObject) {
+            if (singletonObject == null) {
                 ObjectFactory<?> singletonFactory = singletonFactories.get(beanName);
                 
                 if (singletonFactory != null) {

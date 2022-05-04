@@ -1,5 +1,6 @@
 package cn.element.ioc.context.support;
 
+import cn.element.ioc.beans.factory.support.BeanDefinitionReader;
 import cn.element.ioc.beans.factory.support.DefaultListableBeanFactory;
 import cn.element.ioc.beans.factory.xml.XmlBeanDefinitionReader;
 
@@ -14,7 +15,7 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableA
 
     @Override
     protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
-        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory, this);
+        BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory, this);
 
         String[] configLocations = getConfigLocations();
 

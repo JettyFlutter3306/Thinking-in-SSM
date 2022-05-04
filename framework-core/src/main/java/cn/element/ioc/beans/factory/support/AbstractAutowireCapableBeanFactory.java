@@ -13,7 +13,7 @@ import cn.hutool.core.util.TypeUtil;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-/**
+/*
  * 实例化Bean类
  *
  * 在 AbstractAutowireCapableBeanFactory 类中实现了 Bean 的实例化操作 newInstance，其实这块会埋下一个坑，

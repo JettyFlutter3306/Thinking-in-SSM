@@ -5,8 +5,6 @@ import cn.hutool.core.lang.Assert;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static cn.hutool.core.util.URLUtil.CLASSPATH_URL_PREFIX;
-
 /**
  * 在获取资源的实现中，主要是把三种不同类型的资源处理方式进行了包装，分为：
  * 判断是否为 ClassPath、URL 以及文件。

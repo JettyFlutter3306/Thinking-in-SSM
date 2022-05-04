@@ -19,7 +19,7 @@ import java.util.Set;
 
 /**
  * 这个 DefaultAdvisorAutoProxyCreator 类的主要核心实现在于
- * postProcessBeforeInstantiation 方法中，从通过 beanFactory.getBeansOfType 获
+ * postProcessAfterInitialization 方法中，从通过 beanFactory.getBeansOfType 获
  * 取 AspectJExpressionPointcutAdvisor 开始
  * 
  * 获取了 advisors 以后就可以遍历相应的 AspectJExpressionPointcutAdvisor 填充对
