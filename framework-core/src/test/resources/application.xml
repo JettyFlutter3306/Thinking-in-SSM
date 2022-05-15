@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <bean id="user" class="cn.element.ioc.test.demo.User">
+        <property name="id" value="1"/>
+        <property name="username" value="洛必达"/>
+        <property name="password" value="123456"/>
+    </bean>
+    
+    <bean class="cn.element.ioc.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    
+    <bean id="userBeforeAdvice" class="cn.element.ioc.test.demo.UserBeforeAdvice"/>
+    <bean id="userAroundAdvice" class="cn.element.ioc.test.demo.UserAroundAdvice"/>
+    
+    <bean id="methodBeforeAdviceInterceptor" class="cn.element.ioc.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="userBeforeAdvice"/>
+    </bean>
+    
+    <bean id="methodAroundAdviceInterceptor" class="cn.element.ioc.aop.framework.adapter.MethodAroundAdviceInterceptor">
+        <property name="advice" ref="userAroundAdvice"/>
+    </bean>
+
+    <bean id="pointcutAdvisor" class="cn.element.ioc.aop.aspectj.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* cn.element.ioc.test.demo.User.*(..))"/>
+        <property name="advice" ref="methodAroundAdviceInterceptor"/>
+    </bean>
+</beans>
