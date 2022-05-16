@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,9 +18,16 @@ public class User implements Eatable {
     private String username;
     
     private String password;
+    
+    private String token;
 
     @Override
     public void eat() {
-        System.out.println("吃饭...");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.debug("吃饭...");
     }
 }

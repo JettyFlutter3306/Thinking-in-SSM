@@ -12,5 +12,12 @@ public class TestApplicationContext {
         User user = context.getBean("user", User.class);
         user.eat();
     }
+    
+    @Test
+    public void testPlaceHolder() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:application.xml");
+        User user = context.getBean("user", User.class);
+        System.out.println(user);
+    }
 
 }

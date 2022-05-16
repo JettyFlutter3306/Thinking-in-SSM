@@ -3,10 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     
+    <bean class="cn.element.ioc.beans.factory.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:token.properties"/>
+    </bean>
+    
     <bean id="user" class="cn.element.ioc.test.demo.User">
         <property name="id" value="1"/>
         <property name="username" value="洛必达"/>
         <property name="password" value="123456"/>
+        <property name="token" value="${token}"/>
     </bean>
     
     <bean class="cn.element.ioc.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
