@@ -115,6 +115,5 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
         public String resolveStringValue(String strVal) {
             return PropertyPlaceholderConfigurer.this.resolvePlaceholder(strVal, properties);
         }
-
     }
 }
