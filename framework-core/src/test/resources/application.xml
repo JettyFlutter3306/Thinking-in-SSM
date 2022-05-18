@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans 
        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <context:component-scan base-package="cn.element.ioc.test.demo"/>
     
     <bean class="cn.element.ioc.beans.factory.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:token.properties"/>
     </bean>
     
-    <bean id="user" class="cn.element.ioc.test.demo.User">
+    <bean id="user" class="cn.element.ioc.test.demo.bean.User">
         <property name="id" value="1"/>
         <property name="username" value="洛必达"/>
         <property name="password" value="123456"/>
         <property name="token" value="${token}"/>
     </bean>
     
+    <bean id="person" 
+          class="cn.element.ioc.test.demo.bean.Person" 
+          init-method="init"
+          destroy-method="destroy"
+    />
+    
     <bean class="cn.element.ioc.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     
-    <bean id="userBeforeAdvice" class="cn.element.ioc.test.demo.UserBeforeAdvice"/>
-    <bean id="userAroundAdvice" class="cn.element.ioc.test.demo.UserAroundAdvice"/>
+    <bean id="userBeforeAdvice" class="cn.element.ioc.test.demo.advice.UserBeforeAdvice"/>
+    <bean id="userAroundAdvice" class="cn.element.ioc.test.demo.advice.UserAroundAdvice"/>
     
     <bean id="methodBeforeAdviceInterceptor" class="cn.element.ioc.aop.framework.adapter.MethodBeforeAdviceInterceptor">
         <property name="advice" ref="userBeforeAdvice"/>
@@ -30,7 +39,7 @@
     </bean>
 
     <bean id="pointcutAdvisor" class="cn.element.ioc.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* cn.element.ioc.test.demo.User.*(..))"/>
+        <property name="expression" value="execution(* cn.element.ioc.test.demo.bean.User.*(..))"/>
         <property name="advice" ref="methodAroundAdviceInterceptor"/>
     </bean>
 </beans>

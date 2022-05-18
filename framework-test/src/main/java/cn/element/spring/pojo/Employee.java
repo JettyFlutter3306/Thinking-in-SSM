@@ -11,8 +11,7 @@ public class Employee {
     public Employee() {
         System.out.println("生命周期 第一阶段 ====>① 调用构造器 创建Bean对象");
     }
-
-
+    
     public String getLastName() {
         return lastName;
     }

@@ -1,4 +1,4 @@
-package cn.element.ioc.test.demo;
+package cn.element.ioc.test.demo.advice;
 
 import cn.element.ioc.aop.MethodAroundAdvice;
 import lombok.extern.slf4j.Slf4j;
