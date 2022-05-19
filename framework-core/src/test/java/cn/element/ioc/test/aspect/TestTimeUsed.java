@@ -24,7 +24,7 @@ public class TestTimeUsed {
         person.eat();
         long end = System.currentTimeMillis();
         long time = end - start;
-        log.debug("用时: {}", time);
+        log.debug("用时: {} ms", time);
     }
     
     @Test
@@ -53,7 +53,7 @@ public class TestTimeUsed {
                     method.invoke(person, args);
                     long end = System.currentTimeMillis();
                     long time = end - start;
-                    log.debug("{}方法用时: {}", method.getName(), time);
+                    log.debug("{} 方法用时: {} ms", method.getName(), time);
                     return proxy; 
                 }
         );

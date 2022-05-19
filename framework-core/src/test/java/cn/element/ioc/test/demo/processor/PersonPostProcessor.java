@@ -14,7 +14,7 @@ public class PersonPostProcessor implements BeanPostProcessor {
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof Person) {
             Person person = (Person) bean;
-            person.setId(8080);
+            person.setName("伯努利");
             log.debug("Post Process Before Initialization: {}", bean);
             return person;
         }
@@ -25,7 +25,7 @@ public class PersonPostProcessor implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
         if (bean instanceof Person) {
             Person person = (Person) bean;
-            person.setName("伯努利");
+            person.setGender("女");
             log.debug("Post Process After Initialization: {}", bean);
             return person;
         }

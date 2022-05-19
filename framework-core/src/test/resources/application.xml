@@ -23,7 +23,11 @@
           class="cn.element.ioc.test.demo.bean.Person" 
           init-method="init"
           destroy-method="destroy"
-    />
+    >
+        <property name="id" value="100"/>
+        <property name="name" value="洛必达"/>
+        <property name="gender" value="男"/>
+    </bean>
     
     <bean class="cn.element.ioc.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
     

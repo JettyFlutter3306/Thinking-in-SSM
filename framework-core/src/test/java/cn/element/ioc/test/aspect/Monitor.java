@@ -14,6 +14,6 @@ public class Monitor extends Person {
         super.eat();
         long end = System.currentTimeMillis();
         long time = end - start;
-        log.debug("用时: {}", time);
+        log.debug("用时: {} ms", time);
     }
 }
