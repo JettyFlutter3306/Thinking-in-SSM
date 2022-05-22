@@ -58,11 +58,13 @@ public class TestApplicationContext {
     @Test
     public void testPublishEvent() {
         long id = new Random().nextLong();
-        id = id > 0 ? id : -id;
+        id = id >= 0 ? id : -id;
         String message = "用户正在登录...";
         ConfigurableApplicationContext context0 = (ConfigurableApplicationContext) context; 
         context0.publishEvent(new LoginEvent(context, id, message));
         context0.registerShutdownHook();
     }
+    
+    
 
 }
