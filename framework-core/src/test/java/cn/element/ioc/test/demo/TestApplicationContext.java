@@ -64,7 +64,4 @@ public class TestApplicationContext {
         context0.publishEvent(new LoginEvent(context, id, message));
         context0.registerShutdownHook();
     }
-    
-    
-
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,5 +17,5 @@ public class User {
     private String username;
     private String password;
     private String phone;
-    private LocalDate createTime;
+    private Date createTime;
 }

@@ -15,7 +15,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
      * The returned bean object may be a proxy to use instead of the target bean,
      * effectively suppressing default instantiation of the target bean.
      *
-     * 在 Bean 对象执行初始化方法之前，执行此方法
+     * 在 Bean 对象执行实例化方法之前，执行此方法
      */
     Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException;
 
@@ -24,7 +24,7 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
      * but before Spring property population (from explicit properties or autowiring) occurs.
      * <p>This is the ideal callback for performing field injection on the given bean instance.
      * <p>
-     * 在 Bean 对象执行初始化方法之后，执行此方法
+     * 在 Bean 对象执行实例化方法之后，执行此方法
      */
     boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException;
 
