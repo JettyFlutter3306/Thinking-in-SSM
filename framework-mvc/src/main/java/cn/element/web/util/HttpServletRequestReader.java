@@ -6,16 +6,20 @@ import java.io.IOException;
 
 public class HttpServletRequestReader {
     
-    public static String getPostData(HttpServletRequest request) {
-        StringBuffer data = new StringBuffer();
-        String line = null;
+    public static String getPostData(HttpServletRequest request) throws IOException {
+        StringBuilder data = new StringBuilder();
+        String line;
         BufferedReader reader = null;
         try {
             reader = request.getReader();
             while (null != (line = reader.readLine()))
                 data.append(line);
         } catch (IOException e) {
+            e.printStackTrace();
         } finally {
+            if (reader != null) {
+                reader.close();
+            }
         }
         return data.toString();
     }
